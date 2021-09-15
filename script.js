@@ -8,6 +8,10 @@ document.web3 = web3;
 document.splToken = splToken;
 
 const {
+    LAMPORTS_PER_SOL
+} = web3;
+
+const {
     Token
 } = splToken;
 
@@ -19,10 +23,12 @@ const connection = new web3.Connection(
 const walletPrivkeyInput = document.getElementById("wallet-privkey");
 const walletPubkeySpan = document.getElementById("wallet-pubkey");
 const walletBalanceSpan = document.getElementById("wallet-balance");
+const requestAirdropButton = document.getElementById("request-airdrop");
 
 console.assert(walletPrivkeyInput);
 console.assert(walletPubkeySpan);
 console.assert(walletBalanceSpan);
+console.assert(requestAirdropButton);
 
 // https://www.thetopsites.net/article/50868276.shtml
 const fromHexString = hexString =>
@@ -34,6 +40,7 @@ const toHexString = bytes =>
 let keypair = null;
 
 async function trySetKeypair(secretKeyHex) {
+    keypair = null;
     walletPubkeySpan.innerText = "";
     walletBalanceSpan.innerText = "";
 
@@ -55,6 +62,14 @@ async function trySetKeypair(secretKeyHex) {
     walletPrivkeyInput.value = secretKeyHex;
     walletPubkeySpan.innerText = publicKeyHex;
 
+    await loadAndRenderBalance();
+}
+
+async function loadAndRenderBalance() {
+    if (keypair == null) {
+        return;
+    }
+
     let balance = await connection.getBalance(keypair.publicKey);
     walletBalanceSpan.innerText = balance;
 }
@@ -62,13 +77,23 @@ async function trySetKeypair(secretKeyHex) {
 async function setInitialKeypair() {
     let keypair = new web3.Keypair();
     let secretKeyHex = toHexString(keypair.secretKey);
-    trySetKeypair(secretKeyHex);
+    await trySetKeypair(secretKeyHex);
 }
 
 await setInitialKeypair();
 
-walletPrivkeyInput.addEventListener("input", (e) => {
+walletPrivkeyInput.addEventListener("input", async (e) => {
     let maybePrivKey = walletPrivkeyInput.value;
-    trySetKeypair(maybePrivKey);
+    await trySetKeypair(maybePrivKey);
 });
 
+requestAirdropButton.addEventListener("click", async () => {
+    if (keypair == null) {
+        return;
+    }
+
+    let txSig = await connection.requestAirdrop(keypair.publicKey, LAMPORTS_PER_SOL);
+    await connection.confirmTransaction(txSig);
+
+    loadAndRenderBalance();
+});
