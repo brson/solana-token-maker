@@ -1,0 +1,65 @@
+/* Reset to basic flex style */
+
+* {
+    display: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    box-sizing: inherit;
+    flex-direction: inherit;
+    font-family: inherit;
+    color: inherit;
+    background-color: inherit;
+
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+:root {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+head {
+    display: none;
+}
+
+
+/* table compatibility */
+
+table {
+    display: table;
+}
+
+thead {
+    display: table-header-group;
+}
+
+tbody {
+    display: table-row-group;
+}
+
+tfoot {
+    display: table-footer-group;
+}
+
+tr {
+    display: table-row;
+}
+
+td {
+    display: table-cell;
+}
+
+colgroup {
+    display: table-column-group;
+}
+
+col {
+    display: table-column;
+}
+
+caption {
+    display: table-caption;
+}
