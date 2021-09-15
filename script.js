@@ -31,21 +31,44 @@ const fromHexString = hexString =>
 const toHexString = bytes =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
-let keypair = new web3.Keypair();
+let keypair = null;
 
-let secretKeyHex = toHexString(keypair.secretKey);
-let publicKeyHex = keypair.publicKey.toString();
+async function trySetKeypair(secretKeyHex) {
+    walletPubkeySpan.innerText = "";
+    walletBalanceSpan.innerText = "";
 
-walletPrivkeyInput.value = secretKeyHex;
-walletPubkeySpan.innerText = publicKeyHex;
+    // fromHexString can't handle empty strings
+    if (secretKeyHex == "") {
+        return;
+    }
 
-let balance = await connection.getBalance(keypair.publicKey);
-walletBalanceSpan.innerText = balance;
+    let secretKeyBin = fromHexString(secretKeyHex);
+
+    try {
+        keypair = web3.Keypair.fromSecretKey(secretKeyBin);
+    } catch {
+        return;
+    }
+
+    let publicKeyHex = keypair.publicKey.toString();
+
+    walletPrivkeyInput.value = secretKeyHex;
+    walletPubkeySpan.innerText = publicKeyHex;
+
+    let balance = await connection.getBalance(keypair.publicKey);
+    walletBalanceSpan.innerText = balance;
+}
+
+async function setInitialKeypair() {
+    let keypair = new web3.Keypair();
+    let secretKeyHex = toHexString(keypair.secretKey);
+    trySetKeypair(secretKeyHex);
+}
+
+await setInitialKeypair();
 
 walletPrivkeyInput.addEventListener("input", (e) => {
-    walletPubkeySpan.innerText = "";
     let maybePrivKey = walletPrivkeyInput.value;
-
-    // todo
+    trySetKeypair(maybePrivKey);
 });
 
