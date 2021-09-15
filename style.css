@@ -1,0 +1,8 @@
+button {
+    border: 1px solid black;
+    background-color: lightgray;
+}
+
+input[type="text"] {
+    border: 1px solid black;
+}

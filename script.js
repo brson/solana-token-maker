@@ -18,11 +18,11 @@ const connection = new web3.Connection(
 
 const walletPrivkeyInput = document.getElementById("wallet-privkey");
 const walletPubkeySpan = document.getElementById("wallet-pubkey");
-const walletLamportsSpan = document.getElementById("wallet-lamports");
+const walletBalanceSpan = document.getElementById("wallet-balance");
 
 console.assert(walletPrivkeyInput);
 console.assert(walletPubkeySpan);
-console.assert(walletLamportsSpan);
+console.assert(walletBalanceSpan);
 
 // https://www.thetopsites.net/article/50868276.shtml
 const fromHexString = hexString =>
@@ -38,6 +38,9 @@ let publicKeyHex = keypair.publicKey.toString();
 
 walletPrivkeyInput.value = secretKeyHex;
 walletPubkeySpan.innerText = publicKeyHex;
+
+let balance = await connection.getBalance(keypair.publicKey);
+walletBalanceSpan.innerText = balance;
 
 walletPrivkeyInput.addEventListener("input", (e) => {
     walletPubkeySpan.innerText = "";
