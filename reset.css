@@ -6,9 +6,11 @@
     font-weight: inherit;
     box-sizing: inherit;
     flex-direction: inherit;
+    flex-wrap: inherit;
     font-family: inherit;
     color: inherit;
     background-color: inherit;
+    //overflow: inherit;
 
     margin: 0;
     padding: 0;
@@ -19,7 +21,17 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
 }
+
+:root {
+    //overflow: scroll;
+}
+
+body {
+    //overflow: hidden;
+}
+
 
 head {
     display: none;

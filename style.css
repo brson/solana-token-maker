@@ -1,16 +1,26 @@
 button {
-    border: 1px solid black;
-    background-color: lightgray;
+    box-shadow: inset 0 0 1px green;
+    background-color: #efe;
 }
 
 input[type="text"] {
-    border: 1px solid black;
+    box-shadow: inset 0 0 1px red;
+    background-color: #fee;
 }
 
 * {
     padding: 0.5rem;
 }
 
-section {
-    border: 1px solid black;
+* {
+    box-shadow: inset 0 0 1px gray;
 }
+
+section {
+    box-shadow: inset 0 0 1px orange;
+}
+
+section > p {
+    flex-direction: row;
+}
+
