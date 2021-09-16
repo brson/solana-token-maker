@@ -20,6 +20,10 @@ const connection = new web3.Connection(
     'confirmed',
 );
 
+
+
+
+
 const walletPrivkeyInput = document.getElementById("wallet-privkey");
 const walletPubkeySpan = document.getElementById("wallet-pubkey");
 const walletBalanceSpan = document.getElementById("wallet-balance");
@@ -30,6 +34,10 @@ console.assert(walletPubkeySpan);
 console.assert(walletBalanceSpan);
 console.assert(requestAirdropButton);
 
+
+
+
+
 // https://www.thetopsites.net/article/50868276.shtml
 const fromHexString = hexString =>
   new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
@@ -38,6 +46,47 @@ const toHexString = bytes =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 
 let keypair = null;
+
+
+
+
+
+function getCookieValue(name) {
+    if (document.cookie.includes(`${name}=`) == false) {
+        return null;
+    }
+
+    // https://developer.mozilla.org/en-US/docs/web/api/document/cookie
+    return document.cookie
+        .split('; ')
+        .find(row => row.startsWith(`${name}=`))
+        .split('=')[1];
+}
+
+function setWalletSecretKeyCookie(keypair) {
+    let hex = toHexString(keypair.secretKey);
+    document.cookie = `walletSecretKey=${hex}`;
+}
+
+function getWalletSecretKeyCookie() {
+    let keyHex = getCookieValue("walletSecretKey");
+
+    if (keyHex == null) {
+        return null;
+    }
+
+    return keypairFromHex(keyHex);
+}
+
+function keypairFromHex(secretKey) {
+    let secretKeyBin = fromHexString(secretKey);
+
+    try {
+        return web3.Keypair.fromSecretKey(secretKeyBin);
+    } catch {
+        return null;
+    }
+}
 
 async function trySetKeypair(secretKeyHex) {
     keypair = null;
@@ -49,13 +98,13 @@ async function trySetKeypair(secretKeyHex) {
         return;
     }
 
-    let secretKeyBin = fromHexString(secretKeyHex);
+    keypair = keypairFromHex(secretKeyHex);
 
-    try {
-        keypair = web3.Keypair.fromSecretKey(secretKeyBin);
-    } catch {
+    if (keypair == null) {
         return;
     }
+
+    setWalletSecretKeyCookie(keypair);
 
     let publicKeyHex = keypair.publicKey.toString();
 
@@ -75,10 +124,18 @@ async function loadAndRenderBalance() {
 }
 
 async function setInitialKeypair() {
-    let keypair = new web3.Keypair();
+    let keypair = getWalletSecretKeyCookie();
+
+    if (keypair == null) {
+        keypair = new web3.Keypair();
+    }
+
     let secretKeyHex = toHexString(keypair.secretKey);
     await trySetKeypair(secretKeyHex);
 }
+
+
+
 
 await setInitialKeypair();
 
