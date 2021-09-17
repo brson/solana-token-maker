@@ -47,7 +47,7 @@ section {
 html {
     --c1: #55b;
     --c2: #b99;
-    --sz: 6px;
+    --sz: 4px;
     --hsz: calc(var(--sz) / 2);
     --nhsz: calc(0px - var(--hsz));
     background-color: var(--c1);
@@ -58,7 +58,6 @@ html {
         linear-gradient(-45deg, transparent 75%, var(--c2) 75%);
     background-size: var(--sz) var(--sz);
     background-position: 0 0, 0 var(--hsz), var(--hsz) var(--nhsz), var(--nhsz) 0px;
-    background-position: 0 0, 0 3px, 3px -3px, -3px 0px;
 }
 
 body {
