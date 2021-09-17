@@ -27,6 +27,7 @@ const connection = new web3.Connection(
 const walletPrivkeyInput = document.getElementById("wallet-privkey");
 const walletPubkeySpan = document.getElementById("wallet-pubkey");
 const walletBalanceSpan = document.getElementById("wallet-balance");
+const walletNewPrivkeyButton = document.getElementById("wallet-new-privkey");
 const requestAirdropButton = document.getElementById("request-airdrop");
 
 console.assert(walletPrivkeyInput);
@@ -127,15 +128,21 @@ async function loadAndRenderBalance() {
     walletBalanceSpan.innerText = balance;
 }
 
+async function setRandomKeypair() {
+    let keypair = new web3.Keypair();
+    let secretKeyHex = toHexString(keypair.secretKey);
+    await trySetKeypair(secretKeyHex);
+}
+
 async function setInitialKeypair() {
     let keypair = getWalletSecretKeyCookie();
 
     if (keypair == null) {
         keypair = new web3.Keypair();
+    } else {
+        let secretKeyHex = toHexString(keypair.secretKey);
+        await trySetKeypair(secretKeyHex);
     }
-
-    let secretKeyHex = toHexString(keypair.secretKey);
-    await trySetKeypair(secretKeyHex);
 }
 
 
@@ -146,6 +153,10 @@ await setInitialKeypair();
 walletPrivkeyInput.addEventListener("input", async (e) => {
     let maybePrivKey = walletPrivkeyInput.value;
     await trySetKeypair(maybePrivKey);
+});
+
+walletNewPrivkeyButton.addEventListener("click", async () => {
+    await setRandomKeypair();
 });
 
 requestAirdropButton.addEventListener("click", async () => {
