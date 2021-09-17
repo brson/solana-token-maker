@@ -15,10 +15,14 @@
     overflow-wrap: inherit;
     cursor: inherit;
     box-shadow: inherit;
+    padding: inherit;
+    gap: ineherit;
 
     margin: 0;
-    padding: 0;
     border: 0;
+
+    padding: 0.5rem;
+    gap: 0.5rem;
 }
 
 :root {
