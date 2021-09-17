@@ -71,7 +71,7 @@ div.advanced > h3 {
 }
 
 section#console {
-    display: none;
+    display: none; /* fixme */
     position: fixed;
     right: 0;
     bottom: 0;
