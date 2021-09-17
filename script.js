@@ -15,10 +15,12 @@ const {
     Token
 } = splToken;
 
-const connection = new web3.Connection(
-    web3.clusterApiUrl('devnet'),
-    'confirmed',
-);
+
+
+
+
+
+
 
 
 
@@ -38,6 +40,13 @@ console.assert(requestAirdropButton);
 
 
 
+let keypair = null;
+
+const connection = new web3.Connection(
+    web3.clusterApiUrl('devnet'),
+    'confirmed',
+);
+
 
 
 
@@ -47,16 +56,6 @@ const fromHexString = hexString =>
 
 const toHexString = bytes =>
   bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-
-
-
-
-
-let keypair = null;
-
-
-
-
 
 function getCookieValue(name) {
     if (document.cookie.includes(`${name}=`) == false) {
