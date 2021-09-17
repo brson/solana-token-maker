@@ -160,9 +160,6 @@ function initAdvancedDrawers() {
 
 
 
-initAdvancedDrawers();
-await setInitialKeypair();
-
 walletPrivkeyInput.addEventListener("input", async (e) => {
     let maybePrivKey = walletPrivkeyInput.value;
     await trySetKeypair(maybePrivKey);
@@ -182,4 +179,9 @@ requestAirdropButton.addEventListener("click", async () => {
 
     loadAndRenderBalance();
 });
+
+
+
+initAdvancedDrawers();
+await setInitialKeypair();
 
