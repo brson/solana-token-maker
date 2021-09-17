@@ -148,7 +148,7 @@ async function setInitialKeypair() {
 }
 
 function initAdvancedDrawers() {
-    let headers = document.querySelectorAll(".advanced > h3");
+    let headers = document.querySelectorAll("div.advanced > h3");
 
     for (let header of headers) {
         let container = header.parentElement;
@@ -157,6 +157,8 @@ function initAdvancedDrawers() {
         });
     }
 }
+
+
 
 
 initAdvancedDrawers();
