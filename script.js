@@ -12,7 +12,8 @@ const {
 } = web3;
 
 const {
-    Token
+    Token,
+    TOKEN_PROGRAM_ID
 } = splToken;
 
 
@@ -39,6 +40,11 @@ console.assert(walletBalanceSpan);
 console.assert(walletNewPrivkeyButton);
 console.assert(walletNewPrivkeyOopsButton);
 console.assert(requestAirdropButton);
+
+const createTokenButton = document.getElementById("create-token");
+
+console.assert(createTokenButton);
+
 
 
 
@@ -120,10 +126,10 @@ async function trySetKeypair(secretKeyHex) {
 
     setWalletSecretKeyCookie(keypair);
 
-    let publicKeyHex = keypair.publicKey.toString();
+    let publicKeyString = keypair.publicKey.toString();
 
     walletPrivkeyInput.value = secretKeyHex;
-    walletPubkeySpan.innerText = publicKeyHex;
+    walletPubkeySpan.innerText = publicKeyString;
 
     await loadAndRenderBalance();
 }
@@ -196,6 +202,38 @@ requestAirdropButton.addEventListener("click", async () => {
 
     loadAndRenderBalance();
 });
+
+
+
+
+createTokenButton.addEventListener("click", async () => {
+    if (keypair == null) {
+        return;
+    }
+
+    let payer = keypair;
+    let mintAuthority = keypair.publicKey;
+    let freezeAuthority = keypair.publicKey;
+    let decimals = 9;
+    let programId = null;
+
+    let token = await Token.createMint(
+        connection,
+        payer,
+        mintAuthority,
+        freezeAuthority,
+        decimals,
+        TOKEN_PROGRAM_ID
+    );
+
+    console.log(token);
+
+    console.log(`token publicKey: ${token.publicKey.toString()}`);
+    console.log(`token programId: ${token.programId.toString()}`);
+    console.log(`token payer: ${token.payer.publicKey.toString()}`);
+});
+
+
 
 
 
