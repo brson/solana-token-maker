@@ -39,6 +39,8 @@ console.assert(requestAirdropButton);
 
 
 
+
+
 // https://www.thetopsites.net/article/50868276.shtml
 const fromHexString = hexString =>
   new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
@@ -145,9 +147,19 @@ async function setInitialKeypair() {
     }
 }
 
+function initAdvancedDrawers() {
+    let headers = document.querySelectorAll(".advanced > h3");
+
+    for (let header of headers) {
+        let container = header.parentElement;
+        header.addEventListener("click", () => {
+            container.classList.toggle("visible");
+        });
+    }
+}
 
 
-
+initAdvancedDrawers();
 await setInitialKeypair();
 
 walletPrivkeyInput.addEventListener("input", async (e) => {
@@ -169,3 +181,4 @@ requestAirdropButton.addEventListener("click", async () => {
 
     loadAndRenderBalance();
 });
+
