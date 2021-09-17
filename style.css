@@ -18,7 +18,8 @@ section {
     box-shadow: inset 0 0 2px #ccc;
 }
 
-section > *:not(div.advanced) {
+section > *:not(div.advanced),
+div.advanced > * {
     flex-direction: row;
 }
 
