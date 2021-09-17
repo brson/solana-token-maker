@@ -1,20 +1,5 @@
-button {
-    box-shadow: inset 0 0 2px green;
-    background-color: #dfd;
-    cursor: pointer;
-}
-
-input[type="text"] {
-    box-shadow: inset 0 0 2px red;
-    background-color: #fdd;
-    cursor: text;
-}
-
 * {
     padding: 0.5rem;
-}
-
-* {
     gap: 0.5rem;
 }
 
@@ -31,6 +16,18 @@ section {
     box-shadow: inset 0 0 1px orange;
 }
 
-section > p {
+section > * {
     flex-direction: row;
+}
+
+button {
+    box-shadow: inset 0 0 2px green;
+    background-color: #dfd;
+    cursor: pointer;
+}
+
+input[type="text"] {
+    box-shadow: inset 0 0 2px red;
+    background-color: #fdd;
+    cursor: text;
 }
