@@ -8,7 +8,7 @@
 }
 
 h2 {
-    box-shadow: inset 0 0 1px orange;
+    box-shadow: inset 0 0 1px #f84;
     background-color: #fed;
     justify-content: center;
 }
@@ -23,13 +23,13 @@ section > * {
 
 button {
     box-shadow: inset 0 0 2px green;
-    background-color: #dfd;
+    background-color: #efe;
     cursor: pointer;
 }
 
 input[type="text"] {
     box-shadow: inset 0 0 2px red;
-    background-color: #fdd;
+    background-color: #fee;
     cursor: text;
 }
 
@@ -45,8 +45,8 @@ section {
 /* https://cssgradient.io/blog/gradient-patterns/ */
 /* checkerboard */
 html {
-    --c1: #55f;
-    --c2: #e99;
+    --c1: #55b;
+    --c2: #b99;
     --sz: 6px;
     --hsz: calc(var(--sz) / 2);
     --nhsz: calc(0px - var(--hsz));
