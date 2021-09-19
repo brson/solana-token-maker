@@ -41,7 +41,7 @@ describe('blob', () => {
             }
         );
 
-        let valueBytes = await blob.rpc.get(
+        /*let valueBytes = await blob.rpc.get(
             key,
             {
                 accounts: {
@@ -50,12 +50,12 @@ describe('blob', () => {
                 },
             }
         );
-
-        console.log(valueBytes);
-        console.log(typeof valueBytes);
-
+        */
+        let account = await provider.connection.getAccountInfo(storage);
+        let initByte = account.data[0];
+        assert.ok(initByte == 0xAE);
+        let valueBytes = account.data.slice(1);
         let value = anchor.utils.bytes.utf8.decode(Buffer.from(valueBytes));
-        console.log(value);
 
         assert.ok(value == "bob");
     });

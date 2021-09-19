@@ -72,6 +72,7 @@ pub mod blob {
         Ok(())
     }
 
+    /* fixme - return value doesn't work */
     pub fn get(
         ctx: Context<Get>,
         key: String,
