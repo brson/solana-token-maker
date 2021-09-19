@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{
     system_instruction,
     system_program,
-    program::invoke,
+    program::invoke_signed,
     msg,
 };
 
@@ -19,44 +19,48 @@ pub mod blob {
 
     pub fn set(
         ctx: Context<Set>,
-        base: Pubkey,
         key: String,
         value: Vec<u8>,
         lamports: u64,
     ) -> ProgramResult {
-        let storage_key = Pubkey::create_with_seed(&base, &key, ctx.program_id)?;
-        assert_eq!(&storage_key, ctx.accounts.storage.key);
+        let (storage_key, storage_bump_seed)
+            = Pubkey::find_program_address(
+                &[
+                    ctx.accounts.base.key.as_ref(),
+                    key.as_bytes()
+                ],
+                ctx.program_id
+            );
 
         let from = ctx.accounts.payer.key;
         let to = &storage_key;
-        let seed = &key;
         let space = value.len() + HEADER_BYTES;
         let space_u64 = u64::try_from(space).expect("u64");
         let owner = ctx.program_id;
 
-        let create_account_instr = system_instruction::create_account_with_seed(
+        let create_account_instr = system_instruction::create_account(
             from,
             to,
-            &base,
-            seed,
             lamports,
             space_u64,
             owner
         );
 
-        msg!("hey");
-
-        invoke(
+        invoke_signed(
             &create_account_instr,
             &[
                 ctx.accounts.payer.clone(),
                 ctx.accounts.storage.clone(),
-                ctx.accounts.base.clone(),
                 ctx.accounts.system_program.clone(),
             ],
+            &[
+                &[
+                    ctx.accounts.base.key.as_ref(),
+                    key.as_bytes(),
+                    &[storage_bump_seed]
+                ]
+            ]
         );
-
-        msg!("hey");
 
         let mut storage = ctx.accounts.storage.data.borrow_mut();
         assert_eq!(storage.len(), space);

@@ -16,10 +16,16 @@ describe('blob', () => {
 
         const key = "foo";
         const base = payer;
-        const storage = await anchor.web3.PublicKey.createWithSeed(base.publicKey, key, blob.programId);
+        const [ storage, storage_bump_seed ]  = await anchor.web3.PublicKey.findProgramAddress(
+            [
+                base.publicKey.toBuffer(),
+                anchor.utils.bytes.utf8.encode(key)
+            ],
+            blob.programId
+        );
 
         await blob.rpc.set(
-            base.publicKey, key, Buffer.from("bobb"), new anchor.BN(10000),
+            key, Buffer.from("bobb"), new anchor.BN(10000),
             {
                 accounts: {
                     payer: payer.publicKey,
