@@ -25,32 +25,18 @@ pub mod blob {
     ) -> Result<Option<Vec<u8>>, ProgramError> {
         todo!()
     }
-
-    pub fn delete(
-        ctx: Context<Delete>,
-        base: Pubkey,
-        key: String
-    ) -> Result<bool, ProgramError> {
-        todo!()
-    }
 }
 
 #[derive(Accounts)]
 pub struct Set<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account(mut)]
     pub base: Signer<'info>,
+    pub storage: AccountInfo<'info>,
 }
 
 #[derive(Accounts)]
-pub struct Get {
-}
-
-#[derive(Accounts)]
-pub struct Delete<'info> {
-    #[account(mut)]
-    pub payer: Signer<'info>,
-    #[account(mut)]
-    pub base: Signer<'info>,
+pub struct Get<'info> {
+    pub base: AccountInfo<'info>,
+    pub storage: AccountInfo<'info>,
 }
