@@ -3,12 +3,37 @@ const anchor = require('@project-serum/anchor');
 describe('blob', () => {
 
     // Configure the client to use the local cluster.
-    anchor.setProvider(anchor.Provider.local());
+    const provider = anchor.Provider.local();
+    anchor.setProvider(provider);
 
     it('Is initialized!', async () => {
         // Add your test here.
-        const program = anchor.workspace.Blob;
-        //const tx = await program.rpc.initialize();
-        //console.log("Your transaction signature", tx);
+        const blob = anchor.workspace.Blob;
+
+        const payer = anchor.web3.Keypair.generate();
+
+        await provider.connection.requestAirdrop(payer.publicKey, 1000000);
+
+        const key = "foo";
+        const base = payer;
+        const storage = await anchor.web3.PublicKey.createWithSeed(base.publicKey, key, blob.programId);
+        console.log(payer.publicKey.toString());
+        console.log(base.publicKey.toString());
+        console.log(storage.toString());
+
+        await blob.rpc.set(
+            base.publicKey, key, Buffer.from("bobb"), new anchor.BN(10000),
+            {
+                accounts: {
+                    payer: payer.publicKey,
+                    base: base.publicKey,
+                    storage: storage
+                },
+                signers: [
+                    payer,
+                    base
+                ],
+            }
+        );
     });
 });
