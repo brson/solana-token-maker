@@ -28,7 +28,8 @@ pub mod blob {
         let from = ctx.accounts.payer.key;
         let to = &storage_key;
         let seed = &key;
-        let space = u64::try_from(value.len()).expect("u64") + HEADER_BYTES;
+        let space = value.len() + HEADER_BYTES;
+        let space_u64 = u64::try_from(space).expect("u64");
         let owner = ctx.program_id;
 
         let create_account_instr = system_instruction::create_account_with_seed(
@@ -37,7 +38,7 @@ pub mod blob {
             &base,
             seed,
             lamports,
-            space,
+            space_u64,
             owner
         );
 
@@ -50,7 +51,13 @@ pub mod blob {
             ],
         )?;
 
-        todo!()
+        let mut storage = ctx.accounts.storage.data.borrow_mut();
+        assert_eq!(storage.len(), space);
+
+        storage[1..].copy_from_slice(&value);
+        storage[0] = INITIALIZED;
+
+        Ok(())
     }
 
     pub fn get(
@@ -72,7 +79,7 @@ pub mod blob {
     }
 }
 
-const HEADER_BYTES: u64 = 1;
+const HEADER_BYTES: usize = 1;
 const INITIALIZED: u8 = 0xAE;
 
 #[derive(Accounts)]
