@@ -45,9 +45,9 @@ pub mod blob {
         invoke(
             &create_account_instr,
             &[
-                ctx.accounts.payer.deref().clone(),
+                ctx.accounts.payer.clone(),
                 ctx.accounts.storage.clone(),
-                ctx.accounts.base.deref().clone(),
+                ctx.accounts.base.clone(),
             ],
         )?;
 
@@ -84,9 +84,10 @@ const INITIALIZED: u8 = 0xAE;
 
 #[derive(Accounts)]
 pub struct Set<'info> {
-    #[account(mut)]
-    pub payer: Signer<'info>,
-    pub base: Signer<'info>,
+    #[account(mut, signer)]
+    pub payer: AccountInfo<'info>,
+    #[account(signer)]
+    pub base: AccountInfo<'info>,
     #[account(mut)]
     pub storage: AccountInfo<'info>,
 }
