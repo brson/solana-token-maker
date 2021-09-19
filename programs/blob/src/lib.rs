@@ -1,6 +1,13 @@
 #![allow(unused)]
 
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::{
+    system_instruction,
+    program::invoke,
+};
+
+use std::convert::TryFrom;
+use std::ops::Deref;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
@@ -17,6 +24,32 @@ pub mod blob {
     ) -> ProgramResult {
         let storage_key = Pubkey::create_with_seed(&base, &key, ctx.program_id)?;
         assert_eq!(&storage_key, ctx.accounts.storage.key);
+
+        let from = ctx.accounts.payer.key;
+        let to = &storage_key;
+        let seed = &key;
+        let space = u64::try_from(value.len()).expect("u64") + HEADER_BYTES;
+        let owner = ctx.program_id;
+
+        let create_account_instr = system_instruction::create_account_with_seed(
+            from,
+            to,
+            &base,
+            seed,
+            lamports,
+            space,
+            owner
+        );
+
+        invoke(
+            &create_account_instr,
+            &[
+                ctx.accounts.payer.deref().clone(),
+                ctx.accounts.storage.clone(),
+                ctx.accounts.base.deref().clone(),
+            ],
+        )?;
+
         todo!()
     }
 
@@ -39,6 +72,7 @@ pub mod blob {
     }
 }
 
+const HEADER_BYTES: u64 = 1;
 const INITIALIZED: u8 = 0xAE;
 
 #[derive(Accounts)]
