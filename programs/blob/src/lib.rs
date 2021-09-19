@@ -23,7 +23,15 @@ pub mod blob {
         base: Pubkey,
         key: String,
     ) -> Result<Option<Vec<u8>>, ProgramError> {
-        todo!()
+        let storage_key = Pubkey::create_with_seed(&base, &key, ctx.program_id)?;
+        assert_eq!(&storage_key, ctx.accounts.storage.key);
+
+        let data = ctx.accounts.storage.data.borrow().to_vec();
+        if data.is_empty() {
+            Ok(None)
+        } else {
+            Ok(Some(data))
+        }
     }
 }
 
