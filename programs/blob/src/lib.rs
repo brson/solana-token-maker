@@ -87,6 +87,7 @@ pub struct Set<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     pub base: Signer<'info>,
+    #[account(mut)]
     pub storage: AccountInfo<'info>,
 }
 
