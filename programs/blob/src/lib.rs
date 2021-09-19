@@ -8,10 +8,6 @@ declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 pub mod blob {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> ProgramResult {
-        Ok(())
-    }
-
     pub fn set(
         ctx: Context<Set>,
         base: Pubkey,
@@ -40,11 +36,11 @@ pub mod blob {
 }
 
 #[derive(Accounts)]
-pub struct Initialize {
-}
-
-#[derive(Accounts)]
-pub struct Set {
+pub struct Set<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    #[account(mut)]
+    pub base: Signer<'info>,
 }
 
 #[derive(Accounts)]
@@ -52,5 +48,9 @@ pub struct Get {
 }
 
 #[derive(Accounts)]
-pub struct Delete {
+pub struct Delete<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    #[account(mut)]
+    pub base: Signer<'info>,
 }
