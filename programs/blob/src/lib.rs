@@ -15,6 +15,8 @@ pub mod blob {
         value: Vec<u8>,
         lamports: u64,
     ) -> ProgramResult {
+        let storage_key = Pubkey::create_with_seed(&base, &key, ctx.program_id)?;
+        assert_eq!(&storage_key, ctx.accounts.storage.key);
         todo!()
     }
 
@@ -26,14 +28,18 @@ pub mod blob {
         let storage_key = Pubkey::create_with_seed(&base, &key, ctx.program_id)?;
         assert_eq!(&storage_key, ctx.accounts.storage.key);
 
-        let data = ctx.accounts.storage.data.borrow().to_vec();
+        let data = ctx.accounts.storage.data.borrow();
         if data.is_empty() {
             Ok(None)
         } else {
+            assert_eq!(data[0], INITIALIZED);
+            let data = data[1..].to_vec();
             Ok(Some(data))
         }
     }
 }
+
+const INITIALIZED: u8 = 0xAE;
 
 #[derive(Accounts)]
 pub struct Set<'info> {
