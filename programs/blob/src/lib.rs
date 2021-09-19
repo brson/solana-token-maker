@@ -31,6 +31,7 @@ pub mod blob {
                 ],
                 ctx.program_id
             );
+        assert_eq!(&storage_key, ctx.accounts.storage.key);
 
         let from = ctx.accounts.payer.key;
         let to = &storage_key;
@@ -73,10 +74,16 @@ pub mod blob {
 
     pub fn get(
         ctx: Context<Get>,
-        base: Pubkey,
         key: String,
     ) -> Result<Option<Vec<u8>>, ProgramError> {
-        let storage_key = Pubkey::create_with_seed(&base, &key, ctx.program_id)?;
+        let (storage_key, storage_bump_seed)
+            = Pubkey::find_program_address(
+                &[
+                    ctx.accounts.base.key.as_ref(),
+                    key.as_bytes()
+                ],
+                ctx.program_id
+            );
         assert_eq!(&storage_key, ctx.accounts.storage.key);
 
         let data = ctx.accounts.storage.data.borrow();
