@@ -1,4 +1,5 @@
 const anchor = require('@project-serum/anchor');
+const assert = require("assert");
 
 describe('blob', () => {
 
@@ -25,7 +26,7 @@ describe('blob', () => {
         );
 
         await blob.rpc.set(
-            key, Buffer.from("bobb"), new anchor.BN(10000),
+            key, Buffer.from("bob"), new anchor.BN(10000),
             {
                 accounts: {
                     payer: payer.publicKey,
@@ -39,5 +40,23 @@ describe('blob', () => {
                 ],
             }
         );
+
+        let valueBytes = await blob.rpc.get(
+            key,
+            {
+                accounts: {
+                    base: base.publicKey,
+                    storage: storage
+                },
+            }
+        );
+
+        console.log(valueBytes);
+        console.log(typeof valueBytes);
+
+        let value = anchor.utils.bytes.utf8.decode(Buffer.from(valueBytes));
+        console.log(value);
+
+        assert.ok(value == "bob");
     });
 });
