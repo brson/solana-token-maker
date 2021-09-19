@@ -3,7 +3,9 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{
     system_instruction,
+    system_program,
     program::invoke,
+    msg,
 };
 
 use std::convert::TryFrom;
@@ -42,14 +44,19 @@ pub mod blob {
             owner
         );
 
+        msg!("hey");
+
         invoke(
             &create_account_instr,
             &[
                 ctx.accounts.payer.clone(),
                 ctx.accounts.storage.clone(),
                 ctx.accounts.base.clone(),
+                ctx.accounts.system_program.clone(),
             ],
-        )?;
+        );
+
+        msg!("hey");
 
         let mut storage = ctx.accounts.storage.data.borrow_mut();
         assert_eq!(storage.len(), space);
@@ -90,6 +97,8 @@ pub struct Set<'info> {
     pub base: AccountInfo<'info>,
     #[account(mut)]
     pub storage: AccountInfo<'info>,
+    #[account(address = system_program::ID)]
+    pub system_program: AccountInfo<'info>,
 }
 
 #[derive(Accounts)]

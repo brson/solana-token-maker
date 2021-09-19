@@ -24,7 +24,8 @@ describe('blob', () => {
                 accounts: {
                     payer: payer.publicKey,
                     base: base.publicKey,
-                    storage: storage
+                    storage: storage,
+                    systemProgram: anchor.web3.SystemProgram.programId
                 },
                 signers: [
                     payer,
