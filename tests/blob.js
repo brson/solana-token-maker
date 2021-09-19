@@ -17,9 +17,6 @@ describe('blob', () => {
         const key = "foo";
         const base = payer;
         const storage = await anchor.web3.PublicKey.createWithSeed(base.publicKey, key, blob.programId);
-        console.log(payer.publicKey.toString());
-        console.log(base.publicKey.toString());
-        console.log(storage.toString());
 
         await blob.rpc.set(
             base.publicKey, key, Buffer.from("bobb"), new anchor.BN(10000),
