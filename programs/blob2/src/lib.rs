@@ -63,7 +63,13 @@ pub mod blob2 {
         ctx: Context<Set>,
     ) -> ProgramResult {
         set_or_clear(ctx, None)
-    }    
+    }
+
+    pub fn destroy(
+        ctx: Context<Destroy>,
+    ) -> ProgramResult {
+        todo!()
+    }
 }
 
 pub fn set_or_clear(
@@ -100,16 +106,16 @@ pub fn set_or_clear(
         )?;
     }
 
-    let mut data = ctx.accounts.next_storage.data.borrow_mut();
+    {
+        let mut data = ctx.accounts.next_storage.data.borrow_mut();
 
-    if let Some(value) = value {
-        data[1..].copy_from_slice(&value);
-        data[0] = HAVE_VALUE;
-    } else {
-        assert_eq!(data[0], 0);
+        if let Some(value) = value {
+            data[1..].copy_from_slice(&value);
+            data[0] = HAVE_VALUE;
+        } else {
+            assert_eq!(data[0], 0);
+        }
     }
-
-    drop(data);
 
     ctx.accounts.storage_reference.storage = next_storage;
 
@@ -123,8 +129,6 @@ const HAVE_VALUE: u8 = 0xA1;
 pub struct Init<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
-    #[account(signer)]
-    pub base: AccountInfo<'info>,
     #[account(zero)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
     #[account(
@@ -141,8 +145,6 @@ pub struct Init<'info> {
 pub struct Set<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
-    #[account(signer)]
-    pub base: AccountInfo<'info>,
     #[account(mut, has_one = storage)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
     #[account(mut)]
@@ -155,6 +157,16 @@ pub struct Set<'info> {
     pub next_storage: AccountInfo<'info>,
     #[account(address = system_program::ID)]
     pub system_program: AccountInfo<'info>,
+}
+
+#[derive(Accounts)]
+pub struct Destroy<'info> {
+    #[account(mut, signer)]
+    pub payer: AccountInfo<'info>,
+    #[account(mut, has_one = storage)]
+    pub storage_reference: ProgramAccount<'info, StorageReference>,
+    #[account(mut)]
+    pub storage: AccountInfo<'info>,
 }
 
 #[account]
