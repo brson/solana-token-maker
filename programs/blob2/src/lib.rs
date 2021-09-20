@@ -56,53 +56,64 @@ pub mod blob2 {
         ctx: Context<Set>,
         value: Vec<u8>,
     ) -> ProgramResult {
-        let next_storage_seeds = &[b"next", ctx.accounts.storage.key.as_ref()];
-        let next_storage = Pubkey::find_program_address(next_storage_seeds, ctx.program_id);
-        let (next_storage, next_storage_bump_seed) = next_storage;
-        assert_eq!(&next_storage, ctx.accounts.next_storage.key);
-
-        {
-            let from = ctx.accounts.payer.key;
-            let to = ctx.accounts.next_storage.key;
-            let space = HEADER_BYTES + value.len() as u64;
-            let lamports = 10000;
-            let owner = ctx.program_id;
-
-            invoke_signed(
-                &system_instruction::create_account(
-                    from, to, space, lamports, owner
-                ),
-                &[
-                    ctx.accounts.payer.clone(),
-                    ctx.accounts.next_storage.clone(),
-                    ctx.accounts.system_program.clone(),
-                ],
-                &[
-                    &[
-                        b"init",
-                        &[next_storage_bump_seed]
-                    ]
-                ],
-            )?;
-        }
-
-        let mut data = ctx.accounts.next_storage.data.borrow_mut();
-
-        data[1..].copy_from_slice(&value);
-        data[0] = HAVE_VALUE;
-
-        drop(data);
-
-        ctx.accounts.storage_reference.storage = next_storage;
-
-        Ok(())
+        set_or_clear(ctx, Some(value))
     }
 
     pub fn clear(
         ctx: Context<Set>,
     ) -> ProgramResult {
-        todo!()
+        set_or_clear(ctx, None)
     }    
+}
+
+pub fn set_or_clear(
+    ctx: Context<Set>,
+    value: Option<Vec<u8>>,
+) -> ProgramResult {
+    let next_storage_seeds = &[b"next", ctx.accounts.storage.key.as_ref()];
+    let next_storage = Pubkey::find_program_address(next_storage_seeds, ctx.program_id);
+    let (next_storage, next_storage_bump_seed) = next_storage;
+    assert_eq!(&next_storage, ctx.accounts.next_storage.key);
+
+    {
+        let from = ctx.accounts.payer.key;
+        let to = ctx.accounts.next_storage.key;
+        let space = HEADER_BYTES + value.as_ref().map(Vec::len).unwrap_or_default() as u64;
+        let lamports = 10000;
+        let owner = ctx.program_id;
+
+        invoke_signed(
+            &system_instruction::create_account(
+                from, to, space, lamports, owner
+            ),
+            &[
+                ctx.accounts.payer.clone(),
+                ctx.accounts.next_storage.clone(),
+                ctx.accounts.system_program.clone(),
+            ],
+            &[
+                &[
+                    b"init",
+                    &[next_storage_bump_seed]
+                ]
+            ],
+        )?;
+    }
+
+    let mut data = ctx.accounts.next_storage.data.borrow_mut();
+
+    if let Some(value) = value {
+        data[1..].copy_from_slice(&value);
+        data[0] = HAVE_VALUE;
+    } else {
+        assert_eq!(data[0], 0);
+    }
+
+    drop(data);
+
+    ctx.accounts.storage_reference.storage = next_storage;
+
+    Ok(())
 }
 
 const HEADER_BYTES: u64 = 1;
