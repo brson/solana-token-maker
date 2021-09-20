@@ -18,6 +18,8 @@ pub mod blob2 {
     use super::*;
 
     pub fn init(ctx: Context<Init>) -> ProgramResult {
+        assert!(!ctx.accounts.storage_reference.destroyed);
+
         let initial_storage = Pubkey::find_program_address(&[b"init"], ctx.program_id);
         let (initial_storage, initial_storage_bump_seed) = initial_storage;
         assert_eq!(&initial_storage, ctx.accounts.initial_storage.key);
@@ -56,18 +58,24 @@ pub mod blob2 {
         ctx: Context<Set>,
         value: Vec<u8>,
     ) -> ProgramResult {
+        assert!(!ctx.accounts.storage_reference.destroyed);
+
         set_or_clear(ctx, Some(value))
     }
 
     pub fn clear(
         ctx: Context<Set>,
     ) -> ProgramResult {
+        assert!(!ctx.accounts.storage_reference.destroyed);
+
         set_or_clear(ctx, None)
     }
 
     pub fn destroy(
         ctx: Context<Destroy>,
     ) -> ProgramResult {
+        assert!(!ctx.accounts.storage_reference.destroyed);
+
         todo!()
     }
 }
@@ -172,4 +180,5 @@ pub struct Destroy<'info> {
 #[account]
 pub struct StorageReference {
     pub storage: Pubkey,
+    pub destroyed: bool,
 }
