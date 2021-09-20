@@ -88,12 +88,21 @@ pub mod blob2 {
 
         let mut data = ctx.accounts.next_storage.data.borrow_mut();
 
-        todo!();
+        data[1..].copy_from_slice(&value);
+        data[0] = HAVE_VALUE;
+
+        drop(data);
 
         ctx.accounts.storage_reference.storage = next_storage;
 
         Ok(())
     }
+
+    pub fn clear(
+        ctx: Context<Set>,
+    ) -> ProgramResult {
+        todo!()
+    }    
 }
 
 const HEADER_BYTES: u64 = 1;
