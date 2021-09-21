@@ -135,6 +135,7 @@ pub struct Init<'info> {
         mut,
         constraint = initial_storage.owner == &system_program::ID,
         constraint = initial_storage.data.borrow().is_empty(),
+        owner = *program_id,
     )]
     pub initial_storage: AccountInfo<'info>,
     #[account(address = system_program::ID)]
@@ -152,7 +153,8 @@ pub struct Set<'info> {
     #[account(
         mut,
         constraint = next_storage.owner == &system_program::ID,
-        constraint = next_storage.data.borrow().is_empty()
+        constraint = next_storage.data.borrow().is_empty(),
+        owner = *program_id,
     )]
     pub next_storage: AccountInfo<'info>,
     #[account(address = system_program::ID)]

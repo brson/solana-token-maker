@@ -40,7 +40,6 @@ describe('blob2', () => {
             },
             signers: [
                 payer,
-                storageReference
             ],
         });
 
