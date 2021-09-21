@@ -58,6 +58,8 @@ describe('blob2', () => {
 
         //console.log(blob);
 
+        //let instr = await blob.account.storageReference.createInstruction(payer);
+        //console.log(instr);
         await blob.rpc.init({
             accounts: {
                 payer: payer.publicKey,
@@ -69,6 +71,9 @@ describe('blob2', () => {
                 payer
             ],
         });
+
+        let val = await blob.account.storageReference.fetch(storageReference);
+        console.log(val);
 
     });
 });
