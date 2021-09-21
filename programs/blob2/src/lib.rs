@@ -18,7 +18,12 @@ pub mod blob2 {
     use super::*;
 
     pub fn init(ctx: Context<Init>) -> ProgramResult {
-        let initial_storage = Pubkey::find_program_address(&[b"init"], ctx.program_id);
+        Ok(())
+        /*
+        let initial_storage = Pubkey::find_program_address(
+            &[b"init", ctx.storage_reference.key],
+            ctx.program_id
+        );
         let (initial_storage, initial_storage_bump_seed) = initial_storage;
         assert_eq!(&initial_storage, ctx.accounts.initial_storage.key);
 
@@ -50,7 +55,7 @@ pub mod blob2 {
         ctx.accounts.storage_reference.storage = initial_storage;
 
         Ok(())
-    }
+    */}
 
     pub fn set(
         ctx: Context<Set>,
@@ -129,15 +134,16 @@ const HAVE_VALUE: u8 = 0xA1;
 pub struct Init<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
-    #[account(init, payer = payer, space = 8 + 32)]
+    //#[account(init, payer = payer, space = 8 + 32)]
+    #[account(zero)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
-    #[account(
+    /*#[account(
         mut,
         /*constraint = initial_storage.owner == &system_program::ID,
         constraint = initial_storage.data.borrow().is_empty(),
         owner = *program_id,*/
     )]
-    pub initial_storage: AccountInfo<'info>,
+    pub initial_storage: AccountInfo<'info>,*/
     #[account(address = system_program::ID)]
     pub system_program: AccountInfo<'info>,
 }

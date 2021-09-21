@@ -13,33 +13,60 @@ describe('blob2', () => {
 
         const payer = anchor.web3.Keypair.generate();
 
-        await provider.connection.requestAirdrop(payer.publicKey, 1000000);
+        let airtx = await provider.connection.requestAirdrop(payer.publicKey, anchor.web3.LAMPORTS_PER_SOL);
+        await provider.connection.confirmTransaction(airtx);
 
-        const key = "foo";
+        console.log(anchor.web3.LAMPORTS_PER_SOL);
+
+        let balance = await provider.connection.getBalance(payer.publicKey);
+
+        console.log(`balance ${balance}`);
+
         const storageReference = await anchor.web3.PublicKey.createWithSeed(
             payer.publicKey,
             "foo",
             blob.programId
         );
 
+        let rent = await provider.connection.getMinimumBalanceForRentExemption(8 + 32);
+
+        console.log(`rent ${rent}`);
+
+        console.log("a");
+        let tx = new anchor.web3.Transaction();
+        tx.add(anchor.web3.SystemProgram.createAccountWithSeed({
+            basePubkey: payer.publicKey,
+            fromPubkey: payer.publicKey,
+            lamports: rent,
+            newAccountPubkey: storageReference,
+            programId: blob.programId,
+            seed: "foo",
+            space: 8 + 32
+        }));
+        console.log("b");
+
+        await provider.send(tx, [payer]);
+        console.log("c");
+
         const [ initialStorage, initialStorageBumpSeed ]  = await anchor.web3.PublicKey.findProgramAddress(
             [
-                "init"
+                "init",
+                storageReference.toBuffer()
             ],
             blob.programId
         );
 
-        console.log(blob);
+        //console.log(blob);
 
         await blob.rpc.init({
             accounts: {
                 payer: payer.publicKey,
                 storageReference: storageReference,
-                initialStorage: initialStorage,
+                /*initialStorage: initialStorage,*/
                 systemProgram: anchor.web3.SystemProgram.programId
             },
             signers: [
-                payer,
+                payer
             ],
         });
 
