@@ -18,10 +18,8 @@ pub mod blob2 {
     use super::*;
 
     pub fn init(ctx: Context<Init>) -> ProgramResult {
-        Ok(())
-        /*
         let initial_storage = Pubkey::find_program_address(
-            &[b"init", ctx.storage_reference.key],
+            &[b"init", ctx.accounts.storage_reference.key().as_ref()],
             ctx.program_id
         );
         let (initial_storage, initial_storage_bump_seed) = initial_storage;
@@ -30,13 +28,13 @@ pub mod blob2 {
         {
             let from = ctx.accounts.payer.key;
             let to = ctx.accounts.initial_storage.key;
+            let lamports = 100000;
             let space = HEADER_BYTES;
-            let lamports = 10000;
             let owner = ctx.program_id;
 
             invoke_signed(
                 &system_instruction::create_account(
-                    from, to, space, lamports, owner
+                    from, to, lamports, space, owner
                 ),
                 &[
                     ctx.accounts.payer.clone(),
@@ -46,6 +44,7 @@ pub mod blob2 {
                 &[
                     &[
                         b"init",
+                        ctx.accounts.storage_reference.key().as_ref(),
                         &[initial_storage_bump_seed]
                     ]
                 ],
@@ -55,7 +54,7 @@ pub mod blob2 {
         ctx.accounts.storage_reference.storage = initial_storage;
 
         Ok(())
-    */}
+    }
 
     pub fn set(
         ctx: Context<Set>,
@@ -137,13 +136,13 @@ pub struct Init<'info> {
     //#[account(init, payer = payer, space = 8 + 32)]
     #[account(zero)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
-    /*#[account(
+    #[account(
         mut,
         /*constraint = initial_storage.owner == &system_program::ID,
         constraint = initial_storage.data.borrow().is_empty(),
         owner = *program_id,*/
     )]
-    pub initial_storage: AccountInfo<'info>,*/
+    pub initial_storage: AccountInfo<'info>,
     #[account(address = system_program::ID)]
     pub system_program: AccountInfo<'info>,
 }

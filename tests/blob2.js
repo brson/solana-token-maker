@@ -48,7 +48,7 @@ describe('blob2', () => {
             accounts: {
                 payer: payer.publicKey,
                 storageReference: storageReference,
-                /*initialStorage: initialStorage,*/
+                initialStorage: initialStorage,
                 systemProgram: anchor.web3.SystemProgram.programId
             },
             signers: [
