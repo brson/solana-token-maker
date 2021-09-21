@@ -16,47 +16,33 @@ describe('blob2', () => {
         await provider.connection.requestAirdrop(payer.publicKey, 1000000);
 
         const key = "foo";
-        const base = payer;
-        const [ storage, storage_bump_seed ]  = await anchor.web3.PublicKey.findProgramAddress(
+        const storageReference = await anchor.web3.PublicKey.createWithSeed(
+            payer.publicKey,
+            "foo",
+            blob.programId
+        );
+
+        const [ initialStorage, initialStorageBumpSeed ]  = await anchor.web3.PublicKey.findProgramAddress(
             [
-                base.publicKey.toBuffer(),
-                anchor.utils.bytes.utf8.encode(key)
+                "init"
             ],
             blob.programId
         );
 
-        await blob.rpc.set(
-            key, Buffer.from("bob"), new anchor.BN(10000),
-            {
-                accounts: {
-                    payer: payer.publicKey,
-                    base: base.publicKey,
-                    storage: storage,
-                    systemProgram: anchor.web3.SystemProgram.programId
-                },
-                signers: [
-                    payer,
-                    base
-                ],
-            }
-        );
+        console.log(blob);
 
-        /*let valueBytes = await blob.rpc.get(
-            key,
-            {
-                accounts: {
-                    base: base.publicKey,
-                    storage: storage
-                },
-            }
-        );
-        */
-        let account = await provider.connection.getAccountInfo(storage);
-        let initByte = account.data[0];
-        assert.ok(initByte == 0xAE);
-        let valueBytes = account.data.slice(1);
-        let value = anchor.utils.bytes.utf8.decode(Buffer.from(valueBytes));
+        await blob.rpc.init({
+            accounts: {
+                payer: payer.publicKey,
+                storageReference: storageReference,
+                initialStorage: initialStorage,
+                systemProgram: anchor.web3.SystemProgram.programId
+            },
+            signers: [
+                payer,
+                storageReference
+            ],
+        });
 
-        assert.ok(value == "bob");
     });
 });
