@@ -8,7 +8,6 @@ describe('blob2', () => {
     anchor.setProvider(provider);
 
     it('Is initialized!', async () => {
-        // Add your test here.
         const blob = anchor.workspace.Blob2;
 
         const payer = anchor.web3.Keypair.generate();
@@ -16,10 +15,7 @@ describe('blob2', () => {
         let airtx = await provider.connection.requestAirdrop(payer.publicKey, anchor.web3.LAMPORTS_PER_SOL);
         await provider.connection.confirmTransaction(airtx);
 
-        console.log(anchor.web3.LAMPORTS_PER_SOL);
-
         let balance = await provider.connection.getBalance(payer.publicKey);
-
         console.log(`balance ${balance}`);
 
         const storageReference = await anchor.web3.PublicKey.createWithSeed(
@@ -28,25 +24,17 @@ describe('blob2', () => {
             blob.programId
         );
 
-        let rent = await provider.connection.getMinimumBalanceForRentExemption(8 + 32);
+        let storageReferenceRent = await provider.connection.getMinimumBalanceForRentExemption(8 + 32);
 
-        console.log(`rent ${rent}`);
-
-        console.log("a");
-        let tx = new anchor.web3.Transaction();
-        tx.add(anchor.web3.SystemProgram.createAccountWithSeed({
+        let createStorageReferenceInstr = anchor.web3.SystemProgram.createAccountWithSeed({
             basePubkey: payer.publicKey,
             fromPubkey: payer.publicKey,
-            lamports: rent,
+            lamports: storageReferenceRent,
             newAccountPubkey: storageReference,
             programId: blob.programId,
             seed: "foo",
             space: 8 + 32
-        }));
-        console.log("b");
-
-        await provider.send(tx, [payer]);
-        console.log("c");
+        });
 
         const [ initialStorage, initialStorageBumpSeed ]  = await anchor.web3.PublicKey.findProgramAddress(
             [
@@ -56,10 +44,6 @@ describe('blob2', () => {
             blob.programId
         );
 
-        //console.log(blob);
-
-        //let instr = await blob.account.storageReference.createInstruction(payer);
-        //console.log(instr);
         await blob.rpc.init({
             accounts: {
                 payer: payer.publicKey,
@@ -70,6 +54,9 @@ describe('blob2', () => {
             signers: [
                 payer
             ],
+            instructions: [
+                createStorageReferenceInstr
+            ]
         });
 
         let val = await blob.account.storageReference.fetch(storageReference);
