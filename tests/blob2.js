@@ -46,8 +46,15 @@ describe('blob2', () => {
             ],
         });
 
-        let val = await blob.account.storageReference.fetch(storageReference);
-        console.log(val);
+        let storageReferenceValue = await blob.account.storageReference.fetch(storageReference);
+        console.log(storageReferenceValue);
 
+        let storage = storageReferenceValue.storage;
+
+        let storageAccountInfo = await provider.connection.getAccountInfo(storage);
+        let data = storageAccountInfo.data
+
+        assert.ok(data.length == 1);
+        assert.ok(data[0] == 0);
     });
 });
