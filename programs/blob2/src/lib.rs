@@ -88,13 +88,13 @@ pub fn set_or_clear(
     {
         let from = ctx.accounts.payer.key;
         let to = ctx.accounts.next_storage.key;
-        let space = HEADER_BYTES + value.as_ref().map(Vec::len).unwrap_or_default() as u64;
         let lamports = 10000;
+        let space = HEADER_BYTES + value.as_ref().map(Vec::len).unwrap_or_default() as u64;
         let owner = ctx.program_id;
 
         invoke_signed(
             &system_instruction::create_account(
-                from, to, space, lamports, owner
+                from, to, lamports, space, owner
             ),
             &[
                 ctx.accounts.payer.clone(),
@@ -104,6 +104,7 @@ pub fn set_or_clear(
             &[
                 &[
                     b"next",
+                    ctx.accounts.storage.key.as_ref(),
                     &[next_storage_bump_seed]
                 ]
             ],
@@ -158,7 +159,7 @@ pub struct Set<'info> {
     pub storage_reference: ProgramAccount<'info, StorageReference>,
     #[account(
         mut,
-        owner = system_program::ID
+        owner = *program_id
     )]
     pub storage: AccountInfo<'info>,
     #[account(

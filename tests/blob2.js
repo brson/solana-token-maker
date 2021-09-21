@@ -47,8 +47,6 @@ describe('blob2', () => {
         });
 
         let storageReferenceValue = await blob.account.storageReference.fetch(storageReference);
-        console.log(storageReferenceValue);
-
         let storage = storageReferenceValue.storage;
 
         let storageAccountInfo = await provider.connection.getAccountInfo(storage);
