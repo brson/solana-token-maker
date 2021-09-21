@@ -134,8 +134,6 @@ const HAVE_VALUE: u8 = 0xA1;
 pub struct Init<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
-    //#[account(init, payer = payer, space = 8 + 32)]
-    //#[account(zero)]
     #[account(
         init, payer = payer, space = 8 + 32,
         seeds = [b"key", payer.key.as_ref(), key.as_ref()],
@@ -146,7 +144,6 @@ pub struct Init<'info> {
         mut,
         constraint = initial_storage.owner == &system_program::ID,
         constraint = initial_storage.data.borrow().is_empty(),
-        /*owner = *program_id,*/
     )]
     pub initial_storage: AccountInfo<'info>,
     #[account(address = system_program::ID)]
@@ -165,7 +162,6 @@ pub struct Set<'info> {
         mut,
         constraint = next_storage.owner == &system_program::ID,
         constraint = next_storage.data.borrow().is_empty(),
-        owner = *program_id,
     )]
     pub next_storage: AccountInfo<'info>,
     #[account(address = system_program::ID)]

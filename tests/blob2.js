@@ -16,7 +16,6 @@ describe('blob2', () => {
         await provider.connection.confirmTransaction(airtx);
 
         let balance = await provider.connection.getBalance(payer.publicKey);
-        console.log(`balance ${balance}`);
 
         const [ storageReference, storageReferenceBumpSeed ] = await anchor.web3.PublicKey.findProgramAddress(
             [
@@ -45,9 +44,6 @@ describe('blob2', () => {
             signers: [
                 payer
             ],
-            /*instructions: [
-                createStorageReferenceInstr
-            ]*/
         });
 
         let val = await blob.account.storageReference.fetch(storageReference);
