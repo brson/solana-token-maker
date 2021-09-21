@@ -17,7 +17,7 @@ declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 pub mod blob2 {
     use super::*;
 
-    pub fn init(ctx: Context<Init>) -> ProgramResult {
+    pub fn init(ctx: Context<Init>, key: Vec<u8>, storage_reference_bump_seed: u8) -> ProgramResult {
         let initial_storage = Pubkey::find_program_address(
             &[b"init", ctx.accounts.storage_reference.key().as_ref()],
             ctx.program_id
@@ -130,11 +130,17 @@ const HEADER_BYTES: u64 = 1;
 const HAVE_VALUE: u8 = 0xA1;
 
 #[derive(Accounts)]
+#[instruction(key: Vec<u8>, storage_reference_bump_seed: u8)]
 pub struct Init<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
     //#[account(init, payer = payer, space = 8 + 32)]
-    #[account(zero)]
+    //#[account(zero)]
+    #[account(
+        init, payer = payer, space = 8 + 32,
+        seeds = [b"key", payer.key.as_ref(), key.as_ref()],
+        bump = storage_reference_bump_seed
+    )]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
     #[account(
         mut,

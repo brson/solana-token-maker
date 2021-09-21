@@ -18,23 +18,14 @@ describe('blob2', () => {
         let balance = await provider.connection.getBalance(payer.publicKey);
         console.log(`balance ${balance}`);
 
-        const storageReference = await anchor.web3.PublicKey.createWithSeed(
-            payer.publicKey,
-            "foo",
+        const [ storageReference, storageReferenceBumpSeed ] = await anchor.web3.PublicKey.findProgramAddress(
+            [
+                "key",
+                payer.publicKey.toBuffer(),
+                "foo",
+            ],
             blob.programId
         );
-
-        let storageReferenceRent = await provider.connection.getMinimumBalanceForRentExemption(8 + 32);
-
-        let createStorageReferenceInstr = anchor.web3.SystemProgram.createAccountWithSeed({
-            basePubkey: payer.publicKey,
-            fromPubkey: payer.publicKey,
-            lamports: storageReferenceRent,
-            newAccountPubkey: storageReference,
-            programId: blob.programId,
-            seed: "foo",
-            space: 8 + 32
-        });
 
         const [ initialStorage, initialStorageBumpSeed ]  = await anchor.web3.PublicKey.findProgramAddress(
             [
@@ -44,7 +35,7 @@ describe('blob2', () => {
             blob.programId
         );
 
-        await blob.rpc.init({
+        await blob.rpc.init(Buffer.from("foo"), storageReferenceBumpSeed, {
             accounts: {
                 payer: payer.publicKey,
                 storageReference: storageReference,
@@ -54,9 +45,9 @@ describe('blob2', () => {
             signers: [
                 payer
             ],
-            instructions: [
+            /*instructions: [
                 createStorageReferenceInstr
-            ]
+            ]*/
         });
 
         let val = await blob.account.storageReference.fetch(storageReference);
