@@ -236,13 +236,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "blob"
-version = "0.1.0"
-dependencies = [
- "anchor-lang",
-]
-
-[[package]]
 name = "blob2"
 version = "0.1.0"
 dependencies = [
