@@ -18,8 +18,6 @@ pub mod blob2 {
     use super::*;
 
     pub fn init(ctx: Context<Init>) -> ProgramResult {
-        assert!(!ctx.accounts.storage_reference.destroyed);
-
         let initial_storage = Pubkey::find_program_address(&[b"init"], ctx.program_id);
         let (initial_storage, initial_storage_bump_seed) = initial_storage;
         assert_eq!(&initial_storage, ctx.accounts.initial_storage.key);
@@ -58,24 +56,18 @@ pub mod blob2 {
         ctx: Context<Set>,
         value: Vec<u8>,
     ) -> ProgramResult {
-        assert!(!ctx.accounts.storage_reference.destroyed);
-
         set_or_clear(ctx, Some(value))
     }
 
     pub fn clear(
         ctx: Context<Set>,
     ) -> ProgramResult {
-        assert!(!ctx.accounts.storage_reference.destroyed);
-
         set_or_clear(ctx, None)
     }
 
-    pub fn destroy(
-        ctx: Context<Destroy>,
+    pub fn close(
+        ctx: Context<Close>,
     ) -> ProgramResult {
-        assert!(!ctx.accounts.storage_reference.destroyed);
-
         todo!()
     }
 }
@@ -137,7 +129,7 @@ const HAVE_VALUE: u8 = 0xA1;
 pub struct Init<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
-    #[account(zero)]
+    #[account(init, payer = payer)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
     #[account(
         mut,
@@ -168,17 +160,17 @@ pub struct Set<'info> {
 }
 
 #[derive(Accounts)]
-pub struct Destroy<'info> {
+pub struct Close<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
-    #[account(mut, has_one = storage)]
+    #[account(mut, has_one = storage, close = payer)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
     #[account(mut)]
     pub storage: AccountInfo<'info>,
 }
 
 #[account]
+#[derive(Default)]
 pub struct StorageReference {
     pub storage: Pubkey,
-    pub destroyed: bool,
 }
