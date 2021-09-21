@@ -129,13 +129,13 @@ const HAVE_VALUE: u8 = 0xA1;
 pub struct Init<'info> {
     #[account(mut, signer)]
     pub payer: AccountInfo<'info>,
-    #[account(init, payer = payer)]
+    #[account(init, payer = payer, space = 8 + 32)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
     #[account(
         mut,
-        constraint = initial_storage.owner == &system_program::ID,
+        /*constraint = initial_storage.owner == &system_program::ID,
         constraint = initial_storage.data.borrow().is_empty(),
-        owner = *program_id,
+        owner = *program_id,*/
     )]
     pub initial_storage: AccountInfo<'info>,
     #[account(address = system_program::ID)]
