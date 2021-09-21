@@ -103,7 +103,7 @@ pub fn set_or_clear(
             ],
             &[
                 &[
-                    b"init",
+                    b"next",
                     &[next_storage_bump_seed]
                 ]
             ],
@@ -156,7 +156,10 @@ pub struct Set<'info> {
     pub payer: AccountInfo<'info>,
     #[account(mut, has_one = storage)]
     pub storage_reference: ProgramAccount<'info, StorageReference>,
-    #[account(mut)]
+    #[account(
+        mut,
+        owner = system_program::ID
+    )]
     pub storage: AccountInfo<'info>,
     #[account(
         mut,
