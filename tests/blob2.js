@@ -46,15 +46,25 @@ describe('blob2', () => {
             ],
         });
 
-        let storageReferenceValue = await blob.account.storageReference.fetch(storageReference);
-        let storage = storageReferenceValue.storage;
+        async function getStorage(provider, blob, storageReference) {
+            let storageReferenceValue = await blob.account.storageReference.fetch(storageReference);
+            let storage = storageReferenceValue.storage;
 
-        let storageAccountInfo = await provider.connection.getAccountInfo(storage);
-        let data = storageAccountInfo.data
+            let storageAccountInfo = await provider.connection.getAccountInfo(storage);
+            let data = storageAccountInfo.data;
 
-        assert.ok(data.length == 1);
-        assert.ok(data[0] == 0);
+            assert.ok(data.length > 0);
+            let header = data[0];
+            let payload = data.slice(1);
+            if (header == 0) {
+                return null;
+            } else {
+                return payload;
+            }
+        }
 
+        let data = await getStorage(provider, blob, storageReference);
+        assert.ok(data === null);
 
         const [ nextStorage, nextStorageBumpSeed ]  = await anchor.web3.PublicKey.findProgramAddress(
             [
