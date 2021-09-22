@@ -87,6 +87,8 @@ describe('blob2', () => {
             ],
         });
 
+        let data2 = await getStorage(provider, blob, storageReference);
+        assert.ok(data2.equals(Buffer.from("bar")));
 
     });
 });
