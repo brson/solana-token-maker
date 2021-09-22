@@ -90,5 +90,28 @@ describe('blob2', () => {
         let data2 = await getStorage(provider, blob, storageReference);
         assert.ok(data2.equals(Buffer.from("bar")));
 
+        const [ nextStorage2, nextStorageBumpSeed2 ]  = await anchor.web3.PublicKey.findProgramAddress(
+            [
+                "next",
+                nextStorage.toBuffer()
+            ],
+            blob.programId
+        );
+
+        await blob.rpc.clear({
+            accounts: {
+                payer: payer.publicKey,
+                storageReference: storageReference,
+                storage: nextStorage,
+                nextStorage: nextStorage2,
+                systemProgram: anchor.web3.SystemProgram.programId
+            },
+            signers: [
+                payer
+            ],
+        });
+
+        let data3 = await getStorage(provider, blob, storageReference);
+        assert.ok(data3 === null);
     });
 });
