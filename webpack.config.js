@@ -1,5 +1,10 @@
+const webpack = require("webpack");
+
 module.exports = {
     mode: "development",
+    output: {
+        library: "nodeBundle",
+    },
     resolve: {
         fallback: {
             "path": require.resolve("path-browserify"),
@@ -7,6 +12,11 @@ module.exports = {
             "fs": false,
         }
     },
+    plugins: [
+        new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+        })
+    ],
     module: {
         rules: [
             {
@@ -15,9 +25,6 @@ module.exports = {
                 use: ["source-map-loader"],
             },
         ],        
-    },
-    output: {
-        library: "nodeBundle",
     },
     ignoreWarnings: [/Failed to parse source map/],
 }

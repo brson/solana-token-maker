@@ -21,6 +21,8 @@ const {
 
 
 
+const blob2Idl = await fetch("../target/idl/blob2.json").then(r => r.json());
+const blob2PrgramIdDevnet = "AZaQpixCo3L7XgNQsujHGoWQKivjCzL3J8SWG9VZvcdn";
 
 
 
@@ -58,6 +60,10 @@ const connection = new web3.Connection(
     web3.clusterApiUrl('devnet'),
     'confirmed',
 );
+
+const anchorProvider = new anchor.Provider(connection);
+const blob2 = new anchor.Program(blob2Idl, blob2PrgramIdDevnet, anchorProvider);
+
 
 
 
@@ -241,4 +247,3 @@ createTokenButton.addEventListener("click", async () => {
 
 initAdvancedDrawers();
 await setInitialKeypair();
-
