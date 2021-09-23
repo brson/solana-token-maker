@@ -18,36 +18,20 @@ const {
     TOKEN_PROGRAM_ID
 } = splToken;
 
-
-
+import {
+    walletPrivkeyInput,
+    walletPubkeySpan,
+    walletBalanceSpan,
+    walletNewPrivkeyButton,
+    walletNewPrivkeyOopsButton,
+    requestAirdropButton,
+    createTokenButton,
+} from "./dom.js";
 
 const blob2Idl = await fetch("../target/idl/blob2.json").then(r => r.json());
 const blob2PrgramIdDevnet = "AZaQpixCo3L7XgNQsujHGoWQKivjCzL3J8SWG9VZvcdn";
 
 
-
-
-
-
-
-
-const walletPrivkeyInput = document.getElementById("wallet-privkey");
-const walletPubkeySpan = document.getElementById("wallet-pubkey");
-const walletBalanceSpan = document.getElementById("wallet-balance");
-const walletNewPrivkeyButton = document.getElementById("wallet-new-privkey");
-const walletNewPrivkeyOopsButton = document.getElementById("wallet-new-privkey-oops");
-const requestAirdropButton = document.getElementById("request-airdrop");
-
-console.assert(walletPrivkeyInput);
-console.assert(walletPubkeySpan);
-console.assert(walletBalanceSpan);
-console.assert(walletNewPrivkeyButton);
-console.assert(walletNewPrivkeyOopsButton);
-console.assert(requestAirdropButton);
-
-const createTokenButton = document.getElementById("create-token");
-
-console.assert(createTokenButton);
 
 
 
