@@ -3,10 +3,12 @@ console.assert(splToken);
 console.assert(nodeBundle);
 
 const web3 = solanaWeb3;
+const anchor = nodeBundle.anchor;
 
 // For console testing
 document.web3 = web3;
 document.splToken = splToken;
+document.anchor = anchor;
 
 const {
     LAMPORTS_PER_SOL
