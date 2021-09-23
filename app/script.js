@@ -1,8 +1,7 @@
-console.assert(solanaWeb3);
-console.assert(splToken);
 console.assert(nodeBundle);
 
-const web3 = solanaWeb3;
+const web3 = nodeBundle.web3;
+const splToken = nodeBundle.splToken;
 const anchor = nodeBundle.anchor;
 
 // For console testing
