@@ -1,5 +1,6 @@
 console.assert(solanaWeb3);
 console.assert(splToken);
+console.assert(nodeBundle);
 
 const web3 = solanaWeb3;
 

@@ -16,5 +16,8 @@ module.exports = {
             },
         ],        
     },
+    output: {
+        library: "nodeBundle",
+    },
     ignoreWarnings: [/Failed to parse source map/],
 }
