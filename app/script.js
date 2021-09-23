@@ -18,15 +18,7 @@ const {
     TOKEN_PROGRAM_ID
 } = splToken;
 
-import {
-    walletPrivkeyInput,
-    walletPubkeySpan,
-    walletBalanceSpan,
-    walletNewPrivkeyButton,
-    walletNewPrivkeyOopsButton,
-    requestAirdropButton,
-    createTokenButton,
-} from "./dom.js";
+import * as dom from "./dom.js";
 
 const blob2Idl = await fetch("../target/idl/blob2.json").then(r => r.json());
 const blob2PrgramIdDevnet = "AZaQpixCo3L7XgNQsujHGoWQKivjCzL3J8SWG9VZvcdn";
@@ -102,8 +94,8 @@ async function trySetKeypair(secretKeyHex) {
     }
 
     keypair = null;
-    walletPubkeySpan.innerText = "";
-    walletBalanceSpan.innerText = "";
+    dom.walletPubkeySpan.innerText = "";
+    dom.walletBalanceSpan.innerText = "";
 
     // fromHexString can't handle empty strings
     if (secretKeyHex == "") {
@@ -120,8 +112,8 @@ async function trySetKeypair(secretKeyHex) {
 
     let publicKeyString = keypair.publicKey.toString();
 
-    walletPrivkeyInput.value = secretKeyHex;
-    walletPubkeySpan.innerText = publicKeyString;
+    dom.walletPrivkeyInput.value = secretKeyHex;
+    dom.walletPubkeySpan.innerText = publicKeyString;
 
     await loadAndRenderBalance();
 }
@@ -132,7 +124,7 @@ async function loadAndRenderBalance() {
     }
 
     let balance = await connection.getBalance(keypair.publicKey);
-    walletBalanceSpan.innerText = balance;
+    dom.walletBalanceSpan.innerText = balance;
 }
 
 async function setRandomKeypair() {
@@ -166,16 +158,16 @@ function initAdvancedDrawers() {
 
 
 
-walletPrivkeyInput.addEventListener("input", async (e) => {
-    let maybePrivKey = walletPrivkeyInput.value;
+dom.walletPrivkeyInput.addEventListener("input", async (e) => {
+    let maybePrivKey = dom.walletPrivkeyInput.value;
     await trySetKeypair(maybePrivKey);
 });
 
-walletNewPrivkeyButton.addEventListener("click", async () => {
+dom.walletNewPrivkeyButton.addEventListener("click", async () => {
     await setRandomKeypair();
 });
 
-walletNewPrivkeyOopsButton.addEventListener("click", async () => {
+dom.walletNewPrivkeyOopsButton.addEventListener("click", async () => {
     if (lastKeypair == null) {
         return;
     }
@@ -184,7 +176,7 @@ walletNewPrivkeyOopsButton.addEventListener("click", async () => {
     await trySetKeypair(lastHex);
 });
 
-requestAirdropButton.addEventListener("click", async () => {
+dom.requestAirdropButton.addEventListener("click", async () => {
     if (keypair == null) {
         return;
     }
@@ -198,7 +190,7 @@ requestAirdropButton.addEventListener("click", async () => {
 
 
 
-createTokenButton.addEventListener("click", async () => {
+dom.createTokenButton.addEventListener("click", async () => {
     if (keypair == null) {
         return;
     }
