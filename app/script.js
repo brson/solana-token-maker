@@ -19,10 +19,7 @@ const {
 } = splToken;
 
 import * as dom from "./dom.js";
-
-const blob2Idl = await fetch("../target/idl/blob2.json").then(r => r.json());
-const blob2PrgramIdDevnet = "J6h7RJ9EwLxvEYLqDDvtF1S8GxijChuy5zRKy1NNpU1P";
-
+import * as blob2 from "./blob2.js";
 
 
 
@@ -37,7 +34,6 @@ const connection = new web3.Connection(
 );
 
 const anchorProvider = new anchor.Provider(connection);
-const blob2 = new anchor.Program(blob2Idl, blob2PrgramIdDevnet, anchorProvider);
 
 
 
@@ -154,6 +150,15 @@ function initAdvancedDrawers() {
     }
 }
 
+async function loadTokens() {
+    if (keypair == null) {
+        return;
+    }
+
+    // todo
+}
+
+
 
 
 
@@ -222,3 +227,4 @@ dom.createTokenButton.addEventListener("click", async () => {
 
 initAdvancedDrawers();
 await setInitialKeypair();
+await loadTokens();
