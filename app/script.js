@@ -21,8 +21,7 @@ const {
 import * as dom from "./dom.js";
 
 const blob2Idl = await fetch("../target/idl/blob2.json").then(r => r.json());
-const blob2PrgramIdDevnet = "AZaQpixCo3L7XgNQsujHGoWQKivjCzL3J8SWG9VZvcdn";
-
+const blob2PrgramIdDevnet = "J6h7RJ9EwLxvEYLqDDvtF1S8GxijChuy5zRKy1NNpU1P";
 
 
 
