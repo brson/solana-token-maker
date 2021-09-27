@@ -36,7 +36,8 @@
     cursor: default;
 }
 
-head {
+head,
+template {
     display: none;
 }
 

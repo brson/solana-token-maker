@@ -12,6 +12,12 @@ console.assert(walletNewPrivkeyButton);
 console.assert(walletNewPrivkeyOopsButton);
 console.assert(requestAirdropButton);
 
+export const tokenListDiv = document.getElementById("token-list");
+export const tokenListRowTemplate = document.getElementById("token-list-row-template");
+
+console.assert(tokenListDiv);
+console.assert(tokenListRowTemplate);
+
 export const createTokenButton = document.getElementById("create-token");
 
 console.assert(createTokenButton);

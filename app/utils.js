@@ -20,3 +20,9 @@ export function getCookieValue(name) {
 export function setCookieValue(name, value) {
     document.cookie = `${name}=${value}`;
 }
+
+export function removeAllChildren(elt) {
+    while (elt.firstChild) {
+        elt.removeChild(elt.firstChild);
+    }
+}

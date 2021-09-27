@@ -174,6 +174,16 @@ async function saveTokens() {
 function updateTokenMintsUi() {
     console.log("update token mints");
     console.log(tokenMints);
+
+    utils.removeAllChildren(dom.tokenListDiv);
+
+    for (let tokenMint of tokenMints) {
+        let newRow = dom.tokenListRowTemplate.content.cloneNode(true);
+        let newRowPubkeySpan = newRow.querySelector(".pubkey");
+        console.assert(newRowPubkeySpan);
+        newRowPubkeySpan.innerText = tokenMint;
+        dom.tokenListDiv.appendChild(newRow);
+    }
 }
 
 
