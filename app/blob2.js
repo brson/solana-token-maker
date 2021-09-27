@@ -34,7 +34,7 @@ export async function readKeyString(blob2, payer, base, key) {
 }
 
 export async function writeKeyString(blob2, payer, base, key, value) {
-    return await writeKeyBytes(blob2, payer, base, key, Buffer.from(value));
+    return await writeKeyBytes(blob2, payer, base, key, Uint8Array.from(value));
 }
 
 export async function readKeyBytes(blob2, payer, base, key) {
@@ -52,9 +52,8 @@ export async function writeKeyBytes(blob2, payer, base, key, value) {
 
     {
         let storageReferenceAccountInfo = await provider.connection.getAccountInfo(storageReference);
-        let storageReferenceData = storageReferenceAccountInfo.data;
 
-        if (storageReferenceData.length == 0) {
+        if (storageReferenceAccountInfo == null) {
             await initStorage(blob2, payer, base, key);
         }
     }
@@ -67,12 +66,12 @@ export async function writeKeyBytes(blob2, payer, base, key, value) {
             "next",
             initialStorage.toBuffer()
         ],
-        blob.programId
+        blob2.programId
     );
 
     console.assert(typeof value != "string");
 
-    await blob.rpc.set(value, {
+    await blob2.rpc.set(value, {
         accounts: {
             payer: payer.publicKey,
             storageReference: storageReference,
@@ -98,7 +97,7 @@ async function initStorage(blob2, payer, base, key) {
         blob2.programId
     );
     
-    await blob.rpc.init(Buffer.from(key), storageReferenceBumpSeed, {
+    await blob2.rpc.init(Uint8Array.from(key), storageReferenceBumpSeed, {
         accounts: {
             payer: payer.publicKey,
             storageReference: storageReference,

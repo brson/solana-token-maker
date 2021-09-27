@@ -166,7 +166,17 @@ async function loadTokens() {
     updateTokenMintsUi();
 }
 
-async function updateTokenMintsUi() {
+async function saveTokens() {
+    if (keypair == null) {
+        return;
+    }
+
+    await blob2.writeKeyJson(blob2Program, keypair, keypair, "tokens", tokenMints);
+
+    updateTokenMintsUi();
+}
+
+function updateTokenMintsUi() {
     console.log("update token mints");
     console.log(tokenMints);
 }
@@ -235,6 +245,7 @@ dom.createTokenButton.addEventListener("click", async () => {
 
     tokenMints += [token.publicKey.toString()];
 
+    await saveTokens();
     updateTokenMintsUi();
 });
 
