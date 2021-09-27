@@ -167,6 +167,8 @@ async function loadTokens() {
 }
 
 async function updateTokenMintsUi() {
+    console.log("update token mints");
+    console.log(tokenMints);
 }
 
 
@@ -230,6 +232,10 @@ dom.createTokenButton.addEventListener("click", async () => {
     console.log(`token publicKey: ${token.publicKey.toString()}`);
     console.log(`token programId: ${token.programId.toString()}`);
     console.log(`token payer: ${token.payer.publicKey.toString()}`);
+
+    tokenMints += [token.publicKey.toString()];
+
+    updateTokenMintsUi();
 });
 
 
