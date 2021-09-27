@@ -96,6 +96,7 @@ async function trySetKeypair(secretKeyHex) {
 
     await loadProvider();
     await loadAndRenderBalance();
+    await loadTokens();
 }
 
 async function loadProvider() {
@@ -259,4 +260,3 @@ dom.createTokenButton.addEventListener("click", async () => {
 
 initAdvancedDrawers();
 await setInitialKeypair();
-await loadTokens();
