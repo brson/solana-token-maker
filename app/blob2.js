@@ -2,6 +2,7 @@ console.assert(nodeBundle);
 
 const web3 = nodeBundle.web3;
 const anchor = nodeBundle.anchor;
+const Buffer = nodeBundle.buffer.Buffer;
 
 const blob2Idl = await fetch("../target/idl/blob2.json").then(r => r.json());
 const blob2PrgramIdDevnet = "J6h7RJ9EwLxvEYLqDDvtF1S8GxijChuy5zRKy1NNpU1P";
@@ -34,7 +35,7 @@ export async function readKeyString(blob2, payer, base, key) {
 }
 
 export async function writeKeyString(blob2, payer, base, key, value) {
-    return await writeKeyBytes(blob2, payer, base, key, Uint8Array.from(value));
+    return await writeKeyBytes(blob2, payer, base, key, Buffer.from(value));
 }
 
 export async function readKeyBytes(blob2, payer, base, key) {
@@ -96,8 +97,9 @@ async function initStorage(blob2, payer, base, key) {
         ],
         blob2.programId
     );
-    
-    await blob2.rpc.init(Uint8Array.from(key), storageReferenceBumpSeed, {
+
+    console.log(payer);
+    await blob2.rpc.init(Buffer.from(key), storageReferenceBumpSeed, {
         accounts: {
             payer: payer.publicKey,
             storageReference: storageReference,
