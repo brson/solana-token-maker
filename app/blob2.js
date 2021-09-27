@@ -12,18 +12,20 @@ export async function create(anchorProvider) {
 }
 
 export async function readKeyJson(blob2, payer, base, key) {
+    return JSON.parse(await readKeyString(blob2, payer, base, key));
 }
 
 export async function writeKeyJson(blob2, payer, base, key, value) {
+    return writeKeyString(blob2, payer, base, key, JSON.stringify(value));
 }
 
 export async function readKeyString(blob2, payer, base, key) {
-    let bytes = readKeyBytes(blob2, payer, base, key);
+    let bytes = await readKeyBytes(blob2, payer, base, key);
     return anchor.utils.bytes.utf8.decode(bytes);
 }
 
 export async function writeKeyString(blob2, payer, base, key, value) {
-    return writeKeyBytes(blob2, payer, base, key, Buffer.from(value));
+    return await writeKeyBytes(blob2, payer, base, key, Buffer.from(value));
 }
 
 export async function readKeyBytes(blob2, payer, base, key) {
