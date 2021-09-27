@@ -18,9 +18,12 @@ export async function writeKeyJson(blob2, payer, base, key, value) {
 }
 
 export async function readKeyString(blob2, payer, base, key) {
+    let bytes = readKeyBytes(blob2, payer, base, key);
+    return anchor.utils.bytes.utf8.decode(bytes);
 }
 
 export async function writeKeyString(blob2, payer, base, key, value) {
+    return writeKeyBytes(blob2, payer, base, key, Buffer.from(value));
 }
 
 export async function readKeyBytes(blob2, payer, base, key) {
