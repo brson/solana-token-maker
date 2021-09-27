@@ -27,6 +27,7 @@ import * as blob2 from "./blob2.js";
 
 let keypair = null;
 let lastKeypair = null;
+let tokenMints = [];
 
 const connection = new web3.Connection(
     web3.clusterApiUrl('devnet'),
@@ -34,7 +35,7 @@ const connection = new web3.Connection(
 );
 
 const anchorProvider = new anchor.Provider(connection);
-
+const blob2Program = await blob2.create(anchorProvider);
 
 
 
@@ -155,7 +156,17 @@ async function loadTokens() {
         return;
     }
 
-    // todo
+    let tokenMints_ = await blob2.readKeyJson(blob2Program, keypair, keypair, "tokens");
+    if (tokenMints_ != null) {
+        tokenMints = tokenMints_;
+    } else {
+        tokenMints = [];
+    }
+
+    updateTokenMintsUi();
+}
+
+async function updateTokenMintsUi() {
 }
 
 

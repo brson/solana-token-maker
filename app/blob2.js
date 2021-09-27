@@ -12,7 +12,12 @@ export async function create(anchorProvider) {
 }
 
 export async function readKeyJson(blob2, payer, base, key) {
-    return JSON.parse(await readKeyString(blob2, payer, base, key));
+    let value = await readKeyString(blob2, payer, base, key);
+    if (value != null) {
+        return JSON.parse(value);
+    } else {
+        return null;
+    }
 }
 
 export async function writeKeyJson(blob2, payer, base, key, value) {
@@ -21,7 +26,11 @@ export async function writeKeyJson(blob2, payer, base, key, value) {
 
 export async function readKeyString(blob2, payer, base, key) {
     let bytes = await readKeyBytes(blob2, payer, base, key);
-    return anchor.utils.bytes.utf8.decode(bytes);
+    if (bytes != null) {
+        return anchor.utils.bytes.utf8.decode(bytes);
+    } else {
+        return null;
+    }
 }
 
 export async function writeKeyString(blob2, payer, base, key, value) {
@@ -30,16 +39,16 @@ export async function writeKeyString(blob2, payer, base, key, value) {
 
 export async function readKeyBytes(blob2, payer, base, key) {
     let provider = blob2.provider;
-    const [ storageReference, storageReferenceBumpSeed ] = await storageReferenceForKey(base, key);
+    const [ storageReference, storageReferenceBumpSeed ] = await storageReferenceForKey(blob2, base, key);
 
-    let storage = await getStorage(anchorProvider, blob2, storageReference);
+    let storage = await getStorage(blob2, storageReference);
 
     return storage;
 }
 
 export async function writeKeyBytes(blob2, payer, base, key, value) {
     let provider = blob2.provider;
-    const [ storageReference, storageReferenceBumpSeed ] = await storageReferenceForKey(base, key);
+    const [ storageReference, storageReferenceBumpSeed ] = await storageReferenceForKey(blob2, base, key);
 
     {
         let storageReferenceAccountInfo = await provider.connection.getAccountInfo(storageReference);
@@ -79,7 +88,7 @@ export async function writeKeyBytes(blob2, payer, base, key, value) {
 
 async function initStorage(blob2, payer, base, key) {
     let provider = blob2.provider;
-    const [ storageReference, storageReferenceBumpSeed ] = await storageReferenceForKey(base, key);
+    const [ storageReference, storageReferenceBumpSeed ] = await storageReferenceForKey(blob2, base, key);
 
     const [ initialStorage, initialStorageBumpSeed ]  = await anchor.web3.PublicKey.findProgramAddress(
         [
@@ -107,9 +116,7 @@ async function getStorage(blob2, storageReference) {
 
     {
         let storageReferenceAccountInfo = await provider.connection.getAccountInfo(storageReference);
-        let storageReferenceData = storageReferenceAccountInfo.data;
-
-        if (storageReferenceData.length == 0) {
+        if (storageReferenceAccountInfo == null) {
             return null;
         }
     }
@@ -130,7 +137,7 @@ async function getStorage(blob2, storageReference) {
     }
 }
 
-async function storageReferenceForKey(base, key) {
+async function storageReferenceForKey(blob2, base, key) {
     const [ storageReference, storageReferenceBumpSeed ] = await anchor.web3.PublicKey.findProgramAddress(
         [
             "key",
