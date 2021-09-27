@@ -3,6 +3,7 @@ const webpack = require("webpack");
 module.exports = {
     mode: "development",
     output: {
+        filename: "node-bundle.js",
         library: "nodeBundle",
     },
     resolve: {
