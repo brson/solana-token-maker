@@ -18,6 +18,7 @@ const {
     TOKEN_PROGRAM_ID
 } = splToken;
 
+import * as utils from "./utils.js";
 import * as dom from "./dom.js";
 import * as blob2 from "./blob2.js";
 
@@ -41,36 +42,13 @@ let blob2Program = null;
 
 
 
-// https://www.thetopsites.net/article/50868276.shtml
-const fromHexString = hexString =>
-  new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-
-const toHexString = bytes =>
-  bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-
-function getCookieValue(name) {
-    if (document.cookie.includes(`${name}=`) == false) {
-        return null;
-    }
-
-    // https://developer.mozilla.org/en-US/docs/web/api/document/cookie
-    return document.cookie
-        .split('; ')
-        .find(row => row.startsWith(`${name}=`))
-        .split('=')[1];
-}
-
-function setCookieValue(name, value) {
-    document.cookie = `${name}=${value}`;
-}
-
 function setWalletSecretKeyCookie(keypair) {
-    let hex = toHexString(keypair.secretKey);
-    setCookieValue("walletSecretKey", hex);
+    let hex = utils.toHexString(keypair.secretKey);
+    utils.setCookieValue("walletSecretKey", hex);
 }
 
 function getWalletSecretKeyCookie() {
-    let keyHex = getCookieValue("walletSecretKey");
+    let keyHex = utils.getCookieValue("walletSecretKey");
 
     if (keyHex == null) {
         return null;
@@ -80,7 +58,7 @@ function getWalletSecretKeyCookie() {
 }
 
 function keypairFromHex(secretKey) {
-    let secretKeyBin = fromHexString(secretKey);
+    let secretKeyBin = utils.fromHexString(secretKey);
 
     try {
         return web3.Keypair.fromSecretKey(secretKeyBin);
@@ -142,7 +120,7 @@ async function loadAndRenderBalance() {
 
 async function setRandomKeypair() {
     let keypair = new web3.Keypair();
-    let secretKeyHex = toHexString(keypair.secretKey);
+    let secretKeyHex = utils.toHexString(keypair.secretKey);
     await trySetKeypair(secretKeyHex);
 }
 
@@ -152,7 +130,7 @@ async function setInitialKeypair() {
     if (keypair == null) {
         keypair = new web3.Keypair();
     } else {
-        let secretKeyHex = toHexString(keypair.secretKey);
+        let secretKeyHex = utils.toHexString(keypair.secretKey);
         await trySetKeypair(secretKeyHex);
     }
 }
@@ -216,7 +194,7 @@ dom.walletNewPrivkeyOopsButton.addEventListener("click", async () => {
         return;
     }
 
-    let lastHex = toHexString(lastKeypair.secretKey);
+    let lastHex = utils.toHexString(lastKeypair.secretKey);
     await trySetKeypair(lastHex);
 });
 
