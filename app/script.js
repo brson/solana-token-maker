@@ -34,8 +34,9 @@ const connection = new web3.Connection(
     'confirmed',
 );
 
-const anchorProvider = new anchor.Provider(connection);
-const blob2Program = await blob2.create(anchorProvider);
+let anchorProvider = null;
+let blob2Program = null;
+
 
 
 
@@ -111,7 +112,19 @@ async function trySetKeypair(secretKeyHex) {
     dom.walletPrivkeyInput.value = secretKeyHex;
     dom.walletPubkeySpan.innerText = publicKeyString;
 
+    await loadProvider();
     await loadAndRenderBalance();
+}
+
+async function loadProvider() {
+    anchorProvider = null;
+    blob2Program = null;
+
+    if (keypair != null) {
+        let wallet = new anchor.Wallet(keypair);
+        anchorProvider = new anchor.Provider(connection, wallet, {});
+        blob2Program = await blob2.create(anchorProvider);
+    }
 }
 
 async function loadAndRenderBalance() {
@@ -243,10 +256,9 @@ dom.createTokenButton.addEventListener("click", async () => {
     console.log(`token programId: ${token.programId.toString()}`);
     console.log(`token payer: ${token.payer.publicKey.toString()}`);
 
-    tokenMints += [token.publicKey.toString()];
+    tokenMints.push(token.publicKey.toString());
 
     await saveTokens();
-    updateTokenMintsUi();
 });
 
 

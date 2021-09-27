@@ -65,7 +65,7 @@ export async function writeKeyBytes(blob2, payer, base, key, value) {
     const [ nextStorage, nextStorageBumpSeed ]  = await anchor.web3.PublicKey.findProgramAddress(
         [
             "next",
-            initialStorage.toBuffer()
+            storage.toBuffer()
         ],
         blob2.programId
     );
@@ -76,7 +76,7 @@ export async function writeKeyBytes(blob2, payer, base, key, value) {
         accounts: {
             payer: payer.publicKey,
             storageReference: storageReference,
-            storage: initialStorage,
+            storage: storage,
             nextStorage: nextStorage,
             systemProgram: anchor.web3.SystemProgram.programId
         },
@@ -128,7 +128,6 @@ async function getStorage(blob2, storageReference) {
     let storageAccountInfo = await provider.connection.getAccountInfo(storage);
     let storageData = storageAccountInfo.data;
 
-    assert.ok(storageData.length > 0);
     let header = storageData[0];
     let payload = storageData.slice(1);
     if (header == 0) {
