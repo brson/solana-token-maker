@@ -60,9 +60,13 @@ function getCookieValue(name) {
         .split('=')[1];
 }
 
+function setCookieValue(name, value) {
+    document.cookie = `${name}=${value}`;
+}
+
 function setWalletSecretKeyCookie(keypair) {
     let hex = toHexString(keypair.secretKey);
-    document.cookie = `walletSecretKey=${hex}`;
+    setCookieValue("walletSecretKey", hex);
 }
 
 function getWalletSecretKeyCookie() {
