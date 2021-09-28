@@ -18,6 +18,7 @@
     max-width: inherit;
     max-height: inherit;
     box-shadow: inherit;
+    outline: inherit;
 
     margin: 0;
     border: 0;
@@ -27,6 +28,8 @@
 
 :root {
     box-sizing: border-box;
+    box-shadow: 0;
+    outline: 0;
     flex-wrap: wrap;
     max-width: 100%;
     max-height: 100%;
