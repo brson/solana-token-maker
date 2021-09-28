@@ -21,14 +21,14 @@
     outline: inherit;
 
     margin: 0;
-    border: 0;
+    border: 0 solid black;
     padding: 0;
     gap: 0;
 }
 
 :root {
     box-sizing: border-box;
-    box-shadow: 0 solid black;
+    box-shadow: inset 0 0 0 black;
     outline: 0 solid black;
     flex-wrap: wrap;
     max-width: 100%;
