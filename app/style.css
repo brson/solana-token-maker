@@ -18,15 +18,6 @@ section {
     box-shadow: inset 0 0 2px #ccc;
 }
 
-.row-container > *,
-.row {
-    flex-direction: row;
-}
-
-.space-between {
-    justify-content: space-between;
-}
-
 button {
     background-color: #efe;
     box-shadow: inset 0 0 2px green;
