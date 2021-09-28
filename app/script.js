@@ -136,17 +136,6 @@ async function setInitialKeypair() {
     }
 }
 
-function initAdvancedDrawers() {
-    let headers = document.querySelectorAll("div.advanced > h3");
-
-    for (let header of headers) {
-        let container = header.parentElement;
-        header.addEventListener("click", () => {
-            container.classList.toggle("visible");
-        });
-    }
-}
-
 async function loadTokens() {
     if (keypair == null) {
         return;
@@ -258,5 +247,4 @@ dom.createTokenButton.addEventListener("click", async () => {
 
 
 
-initAdvancedDrawers();
 await setInitialKeypair();
