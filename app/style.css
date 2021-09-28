@@ -18,12 +18,12 @@ section {
     box-shadow: inset 0 0 2px #ccc;
 }
 
-section > *:not(div.list),
-div.list > * {
+.row-container > *,
+.row {
     flex-direction: row;
 }
 
-#token-list > div {
+.space-between {
     justify-content: space-between;
 }
 
