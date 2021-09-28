@@ -17,36 +17,36 @@
 
 <section class="row-container">
   <h2>wallet</h2>
-  <div class="quietbox">
+  <div>
     <span>wallet privkey:</span>
     <input id="wallet-privkey" type="text">
     <button id="wallet-new-privkey">generate</button>
     <button id="wallet-new-privkey-oops">oops!</button>
   </div>
-  <div class="quietbox">
+  <div>
     <span>wallet pubkey:</span>
     <span id="wallet-pubkey"></span>
   </div>
-  <div class="quietbox">
+  <div>
     <span>balance:</span>
     <span id="wallet-balance"></span>
   </div>
-  <div class="quietbox">
+  <div>
     <button id="request-airdrop">request airdrop</button>
   </div>
 </section>
 
 <section>
   <h2 class="row">tokens</h2>
-  <div id="token-list" class="list quietbox">
+  <div id="token-list" class="list">
     <template id="token-list-row-template">
-      <div class="row-container quietbox">
-        <div class="space-between quietbox">
+      <div class="row-container">
+        <div class="space-between">
           <span class="pubkey">pubkey</span>
           <button class="details">▼</button>
         </div>
         <div>
-          details
+          <span>details</span>
         </div>
       </div>
     </template>
@@ -55,7 +55,7 @@
 
 <section class="row-container">
   <h2>token creation</h2>
-  <div class="quietbox">
+  <div>
     <button id="create-token">create</button>
   </div>
 </section>
