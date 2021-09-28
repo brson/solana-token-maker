@@ -24,6 +24,10 @@ div.list > * {
     flex-direction: row;
 }
 
+#token-list > p {
+    justify-content: space-between;
+}
+
 button {
     background-color: #efe;
     box-shadow: inset 0 0 2px green;
