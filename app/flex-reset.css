@@ -28,8 +28,8 @@
 
 :root {
     box-sizing: border-box;
-    box-shadow: 0;
-    outline: 0;
+    box-shadow: 0 solid black;
+    outline: 0 solid black;
     flex-wrap: wrap;
     max-width: 100%;
     max-height: 100%;
