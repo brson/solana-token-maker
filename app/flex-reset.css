@@ -6,18 +6,18 @@
     font-size: inherit;
     font-weight: inherit;
     box-sizing: inherit;
-    flex-direction: inherit;
-    flex-wrap: inherit;
     font-family: inherit;
     color: inherit;
     background-color: inherit;
-    max-width: inherit;
-    max-height: inherit;
     overflow-wrap: inherit;
     cursor: inherit;
+
+    /* these are questionable */
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    max-width: inherit;
+    max-height: inherit;
     box-shadow: inherit;
-    padding: inherit;
-    gap: ineherit;
 
     margin: 0;
     border: 0;
