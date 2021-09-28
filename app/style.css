@@ -1,15 +1,6 @@
-* {
-}
-
 h2 {
     background-color: #fed;
     box-shadow: inset 0 0 2px #f84;
-    justify-content: center;
-}
-
-h3 {
-    background-color: #dfe;
-    box-shadow: inset 0 0 2px #4f8;
     justify-content: center;
 }
 
@@ -21,13 +12,11 @@ section {
 button {
     background-color: #efe;
     box-shadow: inset 0 0 2px green;
-    cursor: pointer;
 }
 
 input[type="text"] {
     background-color: #fee;
     box-shadow: inset 0 0 2px red;
-    cursor: text;
 }
 
 /* https://cssgradient.io/blog/gradient-patterns/ */
