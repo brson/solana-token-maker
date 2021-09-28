@@ -24,7 +24,7 @@ div.list > * {
     flex-direction: row;
 }
 
-#token-list > p {
+#token-list > div {
     justify-content: space-between;
 }
 
@@ -62,11 +62,11 @@ body {
     background-color: transparent;
 }
 
-div.advanced > p {
+div.advanced > div {
     display: none;
 }
 
-div.advanced.visible > p {
+div.advanced.visible > div {
     display: flex;
 }
 

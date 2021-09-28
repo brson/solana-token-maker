@@ -15,48 +15,48 @@
 
 <section>
   <h2>wallet</h2>
-  <p>
+  <div>
     <span>wallet privkey:</span>
     <input id="wallet-privkey" type="text">
     <button id="wallet-new-privkey">generate</button>
     <button id="wallet-new-privkey-oops">oops!</button>
-  </p>
-  <p>
+  </div>
+  <div>
     <span>wallet pubkey:</span>
     <span id="wallet-pubkey"></span>
-  </p>
-  <p>
+  </div>
+  <div>
     <span>balance:</span>
     <span id="wallet-balance"></span>
-  </p>
-  <p>
+  </div>
+  <div>
     <button id="request-airdrop">request airdrop</button>
-  </p>
+  </div>
 </section>
 
 <section>
   <h2>tokens</h2>
   <div class="list" id="token-list">
     <template id="token-list-row-template">
-      <p>
+      <div>
         <span class="pubkey">pubkey</span>
         <button class="details">▼</button>
-      </p>
+      </div>
     </template>
   </div>
 </section>
 
 <section>
   <h2>token creation</h2>
-  <p>
+  <div>
     <button id="create-token">create</button>
-  </p>
+  </div>
   <div class="advanced">
     <h3>advanced</h3>
-    <p>
+    <div>
       <span>decimals:</span>
       <input id="create-token-decimals">
-    </p>
+    </div>
   </div>
 </section>
 
