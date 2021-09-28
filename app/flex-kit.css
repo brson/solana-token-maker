@@ -1,8 +1,3 @@
-* {
-    padding: 0.5rem;
-    gap: 0.5rem;
-}
-
 .row-container > *,
 .row {
     flex-direction: row;
