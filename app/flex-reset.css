@@ -1,5 +1,7 @@
 /* Reset to basic flex style */
 
+/* todo: incorporate https://www.joshwcomeau.com/css/custom-css-reset/ */
+
 * {
     display: flex;
     flex-direction: column;
