@@ -1,6 +1,7 @@
 /* Reset to basic flex style */
 
-/* todo: incorporate https://www.joshwcomeau.com/css/custom-css-reset/ */
+/* todo: incorporate https://www.joshwcomeau.com/css/custom-css-reset/
+   and https://news.ycombinator.com/item?id=29358697 */
 
 * {
     display: flex;
